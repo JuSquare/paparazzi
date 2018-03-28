@@ -57,7 +57,7 @@
 
 
 uint8_t safeToGoForwards        = false;
-int tresholdColorCount          = 0.05 * 124800; // 520 x 240 = 124.800 total pixels
+int tresholdColorCount          = 0.1 * 41280; // 520 x 240 = 124.800 total pixels
 float incrementForAvoidance;
 uint16_t trajectoryConfidence   = 1;
 float maxDistance               = 2.25;
@@ -86,8 +86,8 @@ void orange_avoider_periodic()
 {
   // Check the amount of orange. If this is above a threshold
   // you want to turn a certain amount of degrees
-  safeToGoForwards = color_count < tresholdColorCount;
-  VERBOSE_PRINT("Color_count: %d  threshold: %d safe: %d \n", color_count, tresholdColorCount, safeToGoForwards);
+  safeToGoForwards = color_count > tresholdColorCount;
+  VERBOSE_PRINT("Color_count: %d  threshold: %d safe: %d count right: %d count left: %d \n", color_count, tresholdColorCount, safeToGoForwards, ctr, ctl);
   float moveDistance = fmin(maxDistance, 0.05 * trajectoryConfidence);
   if (safeToGoForwards) {
     moveWaypointForward(WP_GOAL, moveDistance);
@@ -179,4 +179,3 @@ uint8_t chooseRandomIncrementAvoidance()
   }
   return false;
 }
-

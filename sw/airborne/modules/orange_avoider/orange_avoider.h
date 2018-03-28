@@ -26,4 +26,3 @@ extern uint8_t increase_nav_heading(int32_t *heading, float incrementDegrees);
 extern uint8_t chooseRandomIncrementAvoidance(void);
 
 #endif
-

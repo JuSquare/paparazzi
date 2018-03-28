@@ -27,6 +27,8 @@
 #include "image.h"
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
+
 
 /**
  * Create a new image
@@ -148,16 +150,117 @@ void image_to_grayscale(struct image_t *input, struct image_t *output)
  * @param[in] v_M The V maximum value
  * @return The amount of filtered pixels
  */
+
+
 uint16_t image_yuv422_colorfilt(struct image_t *input, struct image_t *output, uint8_t y_m, uint8_t y_M, uint8_t u_m,
                                 uint8_t u_M, uint8_t v_m, uint8_t v_M)
 {
+
   uint16_t cnt = 0;
+
+  uint16_t cnt_l;
+  uint16_t cnt_r;
+  //uint16_t *cnt_l_p;
+  //uint16_t *cnt_r_p;
+
+
+
   uint8_t *source = (uint8_t *)input->buf;
   uint8_t *dest = (uint8_t *)output->buf;
 
   // Copy the creation timestamp (stays the same)
   output->ts = input->ts;
+  //printf("size of source %lu ", sizeof(source));
+  // Go through all the pixels
+  for (uint16_t y = 0; y < output->h; y++) {
 
+    for (uint16_t x = 0; x < output->w; x += 2) {
+      // Check if the color is inside the specified values
+    	if (
+        (dest[1] >= y_m)
+        && (dest[1] <= y_M)
+        && (dest[0] >= u_m)
+        && (dest[0] <= u_M)
+        && (dest[2] >= v_m)
+        && (dest[2] <= v_M)
+      ) {
+        cnt ++;
+        // UYVY
+        dest[0] = 64;        // U
+        dest[1] = source[1];  // Y
+        dest[2] = 255;        // V
+        dest[3] = source[3];  // Y
+        if(
+			x>=272){  //half width of image (?)
+				cnt_r ++;
+			}
+			if(
+				x<=272
+				){
+				cnt_l++;
+			}
+
+      }
+    	else {
+        // UYVY
+        char u = source[0] - 127;
+        u /= 4;
+        dest[0] = 127;        // U
+        dest[1] = source[1];  // Y
+        u = source[2] - 127;
+        u /= 4;
+        dest[2] = 127;        // V
+        dest[3] = source[3];  // Y
+      }
+
+      // Go to the next 2 pixels
+      dest += 4;
+      source += 4;
+    }
+  }
+  //printf("Count left: %d \n", cnt_l);
+  //printf("Count right: %d \n", cnt_r);
+  //cnt_l_p=&cnt_l;
+  //cnt_r_p=&cnt_r;
+
+  return cnt;
+}
+
+
+/**
+ * Filter colors in an YUV422 image
+ * @param[in] *input The input image to filter
+ * @param[out] *output The filtered output image
+ * @param[in] y_m The Y minimum value
+ * @param[in] y_M The Y maximum value
+ * @param[in] u_m The U minimum value
+ * @param[in] u_M The U maximum value
+ * @param[in] v_m The V minimum value
+ * @param[in] v_M The V maximum value
+ * @return The amount of filtered pixels
+ */
+
+
+
+/*
+uint16_t image_yuv422_section(struct image_t *input, struct image_t *output, uint8_t y_m, uint8_t y_M, uint8_t u_m,
+                                uint8_t u_M, uint8_t v_m, uint8_t v_M, uint16_t *count_p_r)
+{
+  uint16_t cnt = 0;
+  uint8_t *source = (uint8_t *)input->buf;
+  uint8_t *dest = (uint8_t *)output->buf;
+  uint16_t cnt_l = 0;
+  uint16_t cnt_r = 0;
+  typedef struct
+  {
+  		uint16_t cnt;
+  		uint16_t cnt_l;
+  		uint16_t cnt_r;
+  }cnters;
+
+  // Copy the creation timestamp (stays the same)
+  output->ts = input->ts;
+  printf("size of source %lu ", sizeof(source));
   // Go trough all the pixels
   for (uint16_t y = 0; y < output->h; y++) {
     for (uint16_t x = 0; x < output->w; x += 2) {
@@ -176,6 +279,15 @@ uint16_t image_yuv422_colorfilt(struct image_t *input, struct image_t *output, u
         dest[1] = source[1];  // Y
         dest[2] = 255;        // V
         dest[3] = source[3];  // Y
+        if(
+        			y>=272){  //half width of image (?)
+        				cnt_r ++;
+        			}
+        			if(
+        				y<=272
+        				){
+        				cnt_l++;
+        			}
       } else {
         // UYVY
         char u = source[0] - 127;
@@ -191,6 +303,74 @@ uint16_t image_yuv422_colorfilt(struct image_t *input, struct image_t *output, u
       // Go to the next 2 pixels
       dest += 4;
       source += 4;
+    }
+  }
+  //cnters p = {cnt, cnt_l, cnt_r};
+  //return p;
+  *count_p_r = cnt_r;
+  return cnt;
+}
+*/
+uint16_t image_yuv422_colorfilt_box(struct image_t *input, struct image_t *output, uint8_t y_m, uint8_t y_M, uint8_t u_m,
+                                uint8_t u_M, uint8_t v_m, uint8_t v_M, uint16_t *count_p_r, uint16_t *count_p_l)
+{
+  uint16_t cnt = 0;
+  uint16_t cnt_r = 0;
+  uint16_t cnt_l = 0;
+  uint8_t *source = input->buf;
+  uint8_t *dest = output->buf;
+
+  // Copy the creation timestamp (stays the same)
+  output->ts = input->ts;
+
+  // Go trough all the pixels
+  for (uint16_t y = 0; y < output->h; y++) {
+    for (uint16_t x = 0; x < output->w; x += 2) {
+      // Check if the color is inside the specified values
+      if (
+        (dest[1] >= y_m)
+        && (dest[1] <= y_M)
+        && (dest[0] >= u_m)
+        && (dest[0] <= u_M)
+        && (dest[2] >= v_m)
+        && (dest[2] <= v_M)
+        && (y >= 100)
+        && (y <= 444)
+        && (x <= 120)
+
+      ) {
+        cnt ++;
+        // UYVY
+        dest[0] = 64;        // U
+        dest[1] = source[1];  // Y
+        dest[2] = 255;        // V
+        dest[3] = source[3];  // Y
+
+        if(
+			y>=272){  //half width of image (?)
+				cnt_r ++;
+			}
+        else{
+				cnt_l++;
+			}
+      } else {
+        // UYVY
+        char u = source[0] - 127;
+        u /= 4;
+        dest[0] = 127;        // U
+        dest[1] = source[1];  // Y
+        u = source[2] - 127;
+        u /= 4;
+        dest[2] = 127;        // V
+        dest[3] = source[3];  // Y
+      }
+
+      // Go to the next 2 pixels
+      dest += 4;
+      source += 4;
+
+      *count_p_r = cnt_r;
+      *count_p_l = cnt_l;
     }
   }
   return cnt;
