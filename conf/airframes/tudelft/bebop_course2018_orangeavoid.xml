@@ -39,8 +39,8 @@
     </module>
     <module name="ins" type="extended"/>
     <!-- <module name="guidance" type="indi"> <define name="GUIDANCE_INDI_SPECIFIC_FORCE_GAIN" 
-			value="-500.0"/> <define name="GUIDANCE_INDI_THRUST_DYNAMICS" value="0.1"/> 
-			<define name="GUIDANCE_INDI_RC_DEBUG" value="TRUE"/> </module> -->
+      value="-500.0"/> <define name="GUIDANCE_INDI_THRUST_DYNAMICS" value="0.1"/> 
+      <define name="GUIDANCE_INDI_RC_DEBUG" value="TRUE"/> </module> -->
     
     <!--module name="geo_mag"/-->
     <module name="air_data"/>
@@ -103,6 +103,17 @@
   </command_laws>
 
   <!-- Cyberzoo bebop1 values -->
+  <!--
+  <section name="COLORFILTER" prefix="ORANGE_AVOIDER_">
+    <define name="LUM_MIN" value="71"/>
+    <define name="LUM_MAX" value="130"/
+    <define name="CB_MIN" value="59"/>
+    <define name="CB_MAX" value="93"/>
+    <define name="CR_MIN" value="63"/>
+    <define name="CR_MAX" value="105"/>
+  </section>
+-->
+<!--
   <section name="COLORFILTER" prefix="ORANGE_AVOIDER_">
     <define name="LUM_MIN" value="20"/>
     <define name="LUM_MAX" value="180"/>
@@ -110,7 +121,17 @@
     <define name="CB_MAX" value="145"/>
     <define name="CR_MIN" value="167"/>
     <define name="CR_MAX" value="255"/>
-  </section>
+  </section>-->
+
+    <section name="COLORFILTER" prefix="ORANGE_AVOIDER_">
+    <define name="LUM_MIN" value="60"/><!--20"/>-->
+    <define name="LUM_MAX" value="140"/><!--180"/>-->
+    <define name="CB_MIN" value="50"/><!--75"/-->
+    <define name="CB_MAX" value="100"/><!--145"/-->
+    <define name="CR_MIN" value="40"/><!--167"/-->
+    <define name="CR_MAX" value="135"/><!--255"/-->
+  </section>  
+
 
   <section name="AIR_DATA" prefix="AIR_DATA_">
     <define name="CALC_AIRSPEED" value="FALSE"/>
