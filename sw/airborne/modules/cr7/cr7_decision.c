@@ -26,8 +26,12 @@
 #include "modules/cr7/cr7_decision.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 uint8_t goLeft, goRight, obstacle, fullStop;
+int16_t greenLeft = 1;
+int16_t greenRight = 5;
+int16_t threshold = 10;
 
 void decide_periodic()
 {
@@ -36,15 +40,19 @@ void decide_periodic()
 		obstacle = 1;
 		if(greenLeft >= greenRight)
 		{
-			goLeft 	= 1;
-			goRight = 0;
+			goLeft 		= 1;
+			goRight 	= 0;
+			fullStop 	= 0;
 		} else if(greenLeft < greenRight)
 		{
-			goRight = 1;
-			goLeft 	= 0
+			goLeft 		= 0;
+			goRight 	= 1;
+			fullStop 	= 0;
 		} else
 		{
-			fullStop = 1;
+			goLeft 		= 0;
+			goRight 	= 0;
+			fullStop 	= 1;
 		}
 	} else
 	{
@@ -53,4 +61,5 @@ void decide_periodic()
 		goRight 	= 0;
 		fullStop 	= 0;
 	}
+//	printf("goLeft = %d, goRight=%d, fullStop=%d, obstacle=%d\n", goLeft,goRight,fullStop,obstacle);
 }

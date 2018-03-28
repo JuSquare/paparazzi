@@ -19,7 +19,7 @@
  */
 /**
  * @file "modules/cr7/cr7_avoider.c"
- * @author M.J.Mollema
+ * @author Michiel Jonathan Mollema
  * 
  */
 
@@ -27,14 +27,10 @@
 #include "generated/flight_plan.h"
 #include "generated/airframe.h"
 #include "firmwares/rotorcraft/navigation.h"
+#include "modules/cr7/cr7_decision.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-uint8_t obstacle 	= 1;
-uint8_t goLeft 		= 0;
-uint8_t goRight 	= 0;
-uint8_t fullStop 	= 1;
 
 void cr7_avoid_periodic()
 {
@@ -45,24 +41,23 @@ void cr7_avoid_periodic()
 //		If obstacle, go left
 		if(goLeft)
 		{
-			printf("GOING LEFT\n");
+//			printf("GOING LEFT\n");
 			moveWaypointLeft(WP_GOAL, moveDistance);
 //		Or if obstacle, go right (depends on vision part)
 		} else if(goRight)
 		{
-			printf("GOING RIGHT\n");
+//			printf("GOING RIGHT\n");
 			moveWaypointRight(WP_GOAL, moveDistance);
-//			nav_set_heading_towards_waypoint(WP_GOAL);
 //		EMERGENCY STOP
 		} else if(fullStop)
 		{
 			waypoint_set_here_2d(WP_GOAL);
-			printf("ERROR, FULL STOP\n");
+//			printf("ERROR, FULL STOP\n");
 		}
 //	If no obstacle is found, set waypoint GOAL forward
 	} else
 	{
-		printf("RECHT-ZO-DIE-GAAT\n");
+//		printf("RECHT-ZO-DIE-GAAT\n");
 		moveWaypointForward(WP_GOAL, moveDistance);
 		nav_set_heading_towards_waypoint(WP_GOAL);
 	}
@@ -90,27 +85,14 @@ static uint8_t calculateLeft(struct EnuCoor_i *new_coor, float distanceMeters)
 	struct EnuCoor_i *pos 			= stateGetPositionEnu_i();
 	struct Int32Eulers *eulerAngles = stateGetNedToBodyEulers_i();
 
-//	printf("EULERS1 %.2f\n", ANGLE_FLOAT_OF_BFP(eulerAngles->psi));
 	nav_set_heading_rad(ANGLE_FLOAT_OF_BFP(eulerAngles->psi) - headingChange);
-//	printf("EULERS2 %.2f\n", ANGLE_FLOAT_OF_BFP(eulerAngles->psi));
-//	struct Int32Eulers *newEulers = stateGetNedToBodyEulers_i();
 
 //	Get current heading, add for left and determine sine and cosine
-//	printf("PSI = %.2f, %.2f\n", ANGLE_FLOAT_OF_BFP(eulerAngles->psi), ANGLE_FLOAT_OF_BFP(eulerAngles->psi)-headingChange);
 	float sin_heading 				= sinf(ANGLE_FLOAT_OF_BFP(eulerAngles->psi));
 	float cos_heading 				= cosf(ANGLE_FLOAT_OF_BFP(eulerAngles->psi));
-
-//	float sin_heading2				= sinf(ANGLE_FLOAT_OF_BFP(eulerAngles->psi));
-//	float cos_heading2 				= cosf(ANGLE_FLOAT_OF_BFP(eulerAngles->psi));
 //	Determine new position of waypoint
 	new_coor->x 					= pos->x + POS_BFP_OF_REAL(sin_heading * (distanceMeters));
 	new_coor->y 					= pos->y + POS_BFP_OF_REAL(cos_heading * (distanceMeters));
-
-//	int32_t test_x;
-//	test_x = pos->x + POS_BFP_OF_REAL(sin_heading2 * distanceMeters);
-
-//	printf("Straight and left: %.2f, %.2f\n", POS_FLOAT_OF_BFP(new_coor->x), POS_FLOAT_OF_BFP(test_x));
-//	printf("TRAJECTORY %.2f %.2f\n", waypoint_get_x(WP_TRAJECTORY), waypoint_get_y(WP_TRAJECTORY));
 	return false;
 }
 
@@ -129,20 +111,6 @@ static uint8_t calculateRight(struct EnuCoor_i *new_coor, float distanceMeters)
 	new_coor->y 					= pos->y + POS_BFP_OF_REAL(cos_heading * (distanceMeters));
 	return false;
 }
-//static uint8_t calculateRight(struct EnuCoor_i * new_coor, float distanceMeters)
-//{
-//	int32_t headingChange 			= 0.05;
-//	struct EnuCoor_i *pos 			= stateGetPositionEnu_i();
-//	struct Int32Eulers *eulerAngles = stateGetNedToBodyEulers_i();
-//	nav_set_heading_rad(ANGLE_FLOAT_OF_BFP(eulerAngles->psi) + headingChange);
-////	Get current heading, add for left and determine sine and cosine
-//	float sin_heading 				= sinf(ANGLE_FLOAT_OF_BFP(eulerAngles->psi));
-//	float cos_heading 				= cosf(ANGLE_FLOAT_OF_BFP(eulerAngles->psi));
-////	Determine new position of waypoint
-//	new_coor->x 					= pos->x + POS_BFP_OF_REAL(sin_heading * (distanceMeters));
-//	new_coor->y 					= pos->y + POS_BFP_OF_REAL(cos_heading * (distanceMeters));
-//	return false;
-//}
 
 /*
  * Sets waypoint 'waypoint' to the coordinates of 'new_coor'

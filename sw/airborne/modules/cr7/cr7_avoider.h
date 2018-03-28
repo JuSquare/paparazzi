@@ -19,7 +19,7 @@
  */
 /**
  * @file "modules/cr7/cr7_avoider.h"
- * @author M.J.Mollema
+ * @author Michiel Jonathan Mollema
  * 
  */
 
