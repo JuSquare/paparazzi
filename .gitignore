@@ -40,6 +40,8 @@ paparazzi.sublime-workspace
 
 # JetBrains (PyCharm, etc) IDE project files
 .idea
+CMakeLists.txt
+cmake-build-debug
 
 # QtCreator IDE
 *.creator
