@@ -1,0 +1,15 @@
+<!DOCTYPE module SYSTEM "module.dtd">
+
+<module name="cr7_decision" dir="cr7">
+  <doc>
+    <description>Deciding on going left/right/straight/stop based on the vision module</description>
+  </doc>
+  <header>
+    <file name="cr7_decision.h"/>
+  </header>
+  <periodic fun="decide_periodic()" freq="4"/>
+  <makefile>
+    <file name="cr7_decision.c"/>
+  </makefile>
+</module>
+

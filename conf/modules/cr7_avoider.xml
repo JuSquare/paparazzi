@@ -1,0 +1,15 @@
+<!DOCTYPE module SYSTEM "module.dtd">
+
+<module name="cr7_avoider" dir="cr7">
+  <doc>
+    <description></description>
+  </doc>
+  <header>
+    <file name="cr7_avoider.h"/>
+  </header>
+  <periodic fun="cr7_avoid_periodic()" freq="50"/>
+  <makefile>
+    <file name="cr7_avoider.c"/>
+  </makefile>
+</module>
+
