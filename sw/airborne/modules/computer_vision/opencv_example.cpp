@@ -34,26 +34,39 @@ using namespace std;
 using namespace cv;
 #include "opencv_image_functions.h"
 
-int opencv_example(char *img, int width, int height)
+int opencv_example(char *raw_img_data, int width, int height)
 {
   // Create a new image, using the original bebop image.
-  Mat M(height, width, CV_8UC2, img);
+  Mat RAW(height, width, CV_8UC2, raw_img_data);
   Mat image;
   // If you want a color image, uncomment this line
-//   cvtColor(M, image, CV_YUV2BGR_Y422);
+  cvtColor(RAW, image, CV_YUV2BGR_Y422);
   // For a grayscale image, use this one
-  cvtColor(M, image, CV_YUV2GRAY_Y422);
+  //cvtColor(M, image, CV_YUV2GRAY_Y422);
 
-  // Blur it, because we can
-//  blur(image, image, Size(5, 5));
+  // Quantize the hue to 30 levels
+  // and the saturation to 32 levels
+  int bbins = 30, gbins = 30; rbins = 30;
+  int histSize[] = {bbins, gbins,rbins};
+  float branges[] = { 0, 256 };
+  float granges[] = { 0, 256 };
+  float rranges[] = { 0, 256 };
+  const float* ranges[] = { branges, granges,rranges };
+  MatND hist;
+  // we compute the histogram from the 0-th and 1-st channels
+  int channels[] = {0,1,2};
 
-  // Canny edges, only works with grayscale image
-  int edgeThresh = 35;
-  Canny(image, image, edgeThresh, edgeThresh * 3);
-
+  calcHist( &image, 1, channels, Mat(), // do not use mask
+            hist, 2, histSize, ranges,
+            true, // the histogram is uniform
+            false );
+  double maxVal=0;
+  int maxLoc= 0;
+  minMaxLoc(hist, 0, &maxVal, 0, 0);
+  cout << maxVal << endl;
   // Convert back to YUV422, and put it in place of the original image
-  grayscale_opencv_to_yuv422(image, img, width, height);
-//  colorrgb_opencv_to_yuv422(image, img, width, height);
+  //grayscale_opencv_to_yuv422(result, raw_img_data, width, height);
+  colorrgb_opencv_to_yuv422(image, raw_img_data, width, height);
 
   return 0;
 }
