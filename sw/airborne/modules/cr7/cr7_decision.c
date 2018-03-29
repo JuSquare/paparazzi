@@ -36,6 +36,8 @@ int16_t greenRight = 0;
 int16_t decisionThreshold = 4000;
 int16_t countThreshold = 5000;
 
+// David is een beunhaas
+
 void decide_periodic()
 {
 	greenLeft = ctl;
