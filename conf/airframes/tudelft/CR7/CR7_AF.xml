@@ -58,9 +58,9 @@
     <module name="cv_colorfilter">
       <define name="COLORFILTER_CAMERA" value="front_camera" />
     </module>
-    <!-- <module name="orange_avoider" /> -->
-    <module name="cr7_avoider" />
+    <module name="cr7_vision" /> 
     <module name="cr7_decision" />
+    <module name="cr7_avoider" />
     <module name="video_rtp_stream">
       <define name="VIEWVIDEO_CAMERA" value="front_camera" />
       <define name="VIEWVIDEO_FPS" value="18" />
@@ -105,14 +105,14 @@
   </command_laws>
 
   <!-- Cyberzoo bebop1 values -->
-<!--   <section name="COLORFILTER" prefix="ORANGE_AVOIDER_">
-    <define name="LUM_MIN" value="20"/> 
-    <define name="LUM_MAX" value="180"/>
-    <define name="CB_MIN" value="75"/>
-    <define name="CB_MAX" value="145"/>
-    <define name="CR_MIN" value="167"/>
-    <define name="CR_MAX" value="255"/>
-  </section> -->
+  <section name="COLORFILTER" prefix="CR7_VISION_">
+    <define name="LUM_MIN" value="60"/><!--20"/>-->
+    <define name="LUM_MAX" value="140"/><!--180"/>-->
+    <define name="CB_MIN" value="50"/><!--75"/-->
+    <define name="CB_MAX" value="100"/><!--145"/-->
+    <define name="CR_MIN" value="40"/><!--167"/-->
+    <define name="CR_MAX" value="135"/><!--255"/-->
+  </section>
 
   <section name="AIR_DATA" prefix="AIR_DATA_">
     <define name="CALC_AIRSPEED" value="FALSE"/>

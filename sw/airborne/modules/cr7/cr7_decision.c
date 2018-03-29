@@ -24,18 +24,27 @@
  */
 
 #include "modules/cr7/cr7_decision.h"
+//#include "modules/cr7/cr7_vision.h"
+#include "modules/computer_vision/colorfilter.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 
 uint8_t goLeft, goRight, obstacle, fullStop;
-int16_t greenLeft = 1;
-int16_t greenRight = 5;
-int16_t threshold = 10;
+int16_t greenLeft = 0;
+int16_t greenRight = 0;
+int16_t decisionThreshold = 4000;
+int16_t countThreshold = 5000;
 
 void decide_periodic()
 {
-	if(greenLeft > threshold || greenRight > threshold)
+	greenLeft = ctl;
+	greenRight= ctr;
+	if(color_count < countThreshold)
+	{
+		obstacle = 1;
+		goLeft = 1;
+	} else if(greenLeft > decisionThreshold || greenRight > decisionThreshold)
 	{
 		obstacle = 1;
 		if(greenLeft >= greenRight)
