@@ -55,6 +55,7 @@ uint16_t color_count = 0;
 uint16_t color_count_boxes[VER_SUBBOXES][HOR_SUBBOXES] = {0};
 
 #include "subsystems/abi.h"
+#include "colorfilter.h"
 
 uint16_t ctr=0;
 uint16_t *count_p_r=&ctr;
@@ -79,6 +80,12 @@ struct image_t *colorfilter_func(struct image_t *img)
                                                       color_cb_min, color_cb_max,
                                                       color_cr_min, color_cr_max
   );
+  for (int i_print = 0; i_print < VER_SUBBOXES; i_print++) {
+    for (int j_print = 0; j_print < HOR_SUBBOXES; j_print++) {
+
+      printf("Box %d: %d", i_print*VER_SUBBOXES + j_print, color_count_boxes[i_print][j_print]);
+    }
+  }
   //printf("Count right: %d", *count_p_r);
 
   if (COLORFILTER_SEND_OBSTACLE) {
