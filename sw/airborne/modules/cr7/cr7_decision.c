@@ -33,7 +33,7 @@
 uint8_t goLeft, goRight, obstacle, fullStop;
 int16_t greenLeft = 0;
 int16_t greenRight = 0;
-int16_t decisionThreshold = 4000;
+int16_t decisionThreshold = 2000;
 int16_t countThreshold = 5000;
 
 // David is een beunhaas
@@ -45,8 +45,10 @@ void decide_periodic()
 	if(color_count < countThreshold)
 	{
 		obstacle = 1;
-		goLeft = 1;
-	} else if(greenLeft > decisionThreshold || greenRight > decisionThreshold)
+//		goLeft = 1;
+		fullStop = 1;
+//	} else if(greenLeft > decisionThreshold || greenRight > decisionThreshold)
+	} else if(abs(greenLeft-greenRight) > decisionThreshold)
 	{
 		obstacle = 1;
 		if(greenLeft >= greenRight)

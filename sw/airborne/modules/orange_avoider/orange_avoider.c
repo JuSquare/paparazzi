@@ -22,7 +22,7 @@
 #include <stdlib.h>
 
 
-#define ORANGE_AVOIDER_VERBOSE TRUE
+#define ORANGE_AVOIDER_VERBOSE FALSE
 
 #define PRINT(string,...) fprintf(stderr, "[orange_avoider->%s()] " string,__FUNCTION__ , ##__VA_ARGS__)
 #if ORANGE_AVOIDER_VERBOSE

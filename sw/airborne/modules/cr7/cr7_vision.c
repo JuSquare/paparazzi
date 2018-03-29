@@ -22,7 +22,7 @@
 #include "subsystems/abi.h"
 
 
-#define CR7_VISION_VERBOSE TRUE
+#define CR7_VISION_VERBOSE FALSE
 
 #define PRINT(string,...) fprintf(stderr, "[orange_avoider->%s()] " string,__FUNCTION__ , ##__VA_ARGS__)
 #if CR7_VISION_VERBOSE
