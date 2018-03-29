@@ -43,9 +43,15 @@ extern uint8_t color_cr_max;
 
 extern int color_count;
 
+
 extern uint16_t ctr;
 extern uint16_t ctl;
 
+extern float avgl;
+extern float avgr;
+
+
+void arrshifter(uint16_t ctr, uint16_t ctl, int i, int j, uint16_t array[2][10], float *avgl, float *avgr);
 
 extern struct video_listener *listener;
 

@@ -21,7 +21,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
+#define J 2
+#define I 10
 #define ORANGE_AVOIDER_VERBOSE TRUE
 
 #define PRINT(string,...) fprintf(stderr, "[orange_avoider->%s()] " string,__FUNCTION__ , ##__VA_ARGS__)
@@ -55,12 +56,18 @@
 #define ORANGE_AVOIDER_CR_MAX 249
 #endif
 
+uint16_t ctlrarr[J][I] = {0}; //upper row=left
 
 uint8_t safeToGoForwards        = false;
 int tresholdColorCount          = 0.1 * 41280; // 520 x 240 = 124.800 total pixels
 float incrementForAvoidance;
 uint16_t trajectoryConfidence   = 1;
 float maxDistance               = 2.25;
+
+int colordir[ 10 ]; //array to store left, right count of pixels
+
+
+
 
 /*
  * Initialisation function, setting the colour filter, random seed and incrementForAvoidance
@@ -86,8 +93,42 @@ void orange_avoider_periodic()
 {
   // Check the amount of orange. If this is above a threshold
   // you want to turn a certain amount of degrees
+
+  arrshifter(ctr, ctl, I, J, ctlrarr, &avgl, &avgr);
+
+  for(int l = 0; l < I; l++) {
+  	  		          printf("%d ", ctlrarr[0][l]);
+  	  		      }
+  	  		      printf("\n");
+  	  for(int l = 0; l < I; l++) {
+  						  printf("%d ", ctlrarr[1][l]);
+  					  }
+  					  printf("\n");
+
   safeToGoForwards = color_count > tresholdColorCount;
   VERBOSE_PRINT("Color_count: %d  threshold: %d safe: %d count right: %d count left: %d \n", color_count, tresholdColorCount, safeToGoForwards, ctr, ctl);
+
+  /*int v=0;
+  int u=0;
+  for (v=0; v<(J); v++){
+  		for (u=0; u<(I-1); u++){
+  			ctlrarr[v][u]=ctlrarr[v][u+1]; //all values in the array shift to the left
+
+  	}
+  		ctlrarr[0][I-1]=ctl; // the last column is replaced by the latest count values
+  		ctlrarr[1][I-1]=ctr;
+  }
+
+	  for(int l = 0; l < I; l++) {
+  		          printf("%d ", ctlrarr[0][l]);
+  		      }
+  		      printf("\n");
+	for(int l = 0; l < I; l++) {
+					  printf("%d ", ctlrarr[1][l]);
+				  }
+				  printf("\n");
+
+*/
   float moveDistance = fmin(maxDistance, 0.05 * trajectoryConfidence);
   if (safeToGoForwards) {
     moveWaypointForward(WP_GOAL, moveDistance);
