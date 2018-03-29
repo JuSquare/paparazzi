@@ -41,14 +41,6 @@ PRINT_CONFIG_VAR(COLORFILTER_FPS)
 PRINT_CONFIG_VAR(COLORFILTER_SEND_OBSTACLE)
 
 struct video_listener *listener = NULL;
-/*
-// Filter Settings
-uint8_t color_lum_min = 105;
-uint8_t color_lum_max = 205;
-uint8_t color_cb_min  = 52;
-uint8_t color_cb_max  = 140;
-uint8_t color_cr_min  = 180;
-uint8_t color_cr_max  = 255;*/
 
 // Filter Settings David
 uint8_t color_lum_min = 71;//105;
@@ -59,7 +51,8 @@ uint8_t color_cr_min  = 63;//180;
 uint8_t color_cr_max  = 105;//255;
 
 // Result
-int color_count = 0;
+uint16_t color_count = 0;
+uint16_t color_count_boxes[VER_SUBBOXES][HOR_SUBBOXES] = {0};
 
 #include "subsystems/abi.h"
 
@@ -69,7 +62,6 @@ uint16_t ctl=0;
 uint16_t *count_p_l=&ctl;
 
 // Function
-struct image_t *colorfilter_func(struct image_t *img);
 struct image_t *colorfilter_func(struct image_t *img)
 {
   // Filter
@@ -78,6 +70,15 @@ struct image_t *colorfilter_func(struct image_t *img)
                                        color_cb_min, color_cb_max,
                                        color_cr_min, color_cr_max, &ctr, &ctl
                                       );
+
+  color_count_boxes = image_yuv422_colorfilt_multibox(img, img,
+                                                      VER_SUBBOXES, HOR_SUBBOXES,
+                                                      color_count_boxes, origin_box,
+                                                      h_box, w_box,
+                                                      color_lum_min, color_lum_max,
+                                                      color_cb_min, color_cb_max,
+                                                      color_cr_min, color_cr_max
+  );
   //printf("Count right: %d", *count_p_r);
 
   if (COLORFILTER_SEND_OBSTACLE) {
