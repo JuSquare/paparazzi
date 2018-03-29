@@ -334,9 +334,9 @@ uint16_t image_yuv422_colorfilt_box(struct image_t *input, struct image_t *outpu
         && (dest[0] <= u_M)
         && (dest[2] >= v_m)
         && (dest[2] <= v_M)
-        && (y >= 100)
-        && (y <= 444)
-        && (x <= 120)
+        && (y >= 125)
+        && (y <= 419)
+        && (x <= 140)
 
       ) {
         cnt ++;
@@ -375,6 +375,69 @@ uint16_t image_yuv422_colorfilt_box(struct image_t *input, struct image_t *outpu
   }
   return cnt;
 }
+
+
+void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *output, uint8_t n_ver, uint8_t n_hor, uint16_t cnts[n_ver][n_hor],
+                                     uint16_t origin_box[2], uint16_t h_box, uint16_t w_box, uint8_t y_m, uint8_t y_M, uint8_t u_m,
+                                     uint8_t u_M, uint8_t v_m, uint8_t v_M)
+{
+  uint8_t *source = input->buf;
+  uint8_t *dest = output->buf;
+
+  uint16_t origin_subbox[2] = {origin_box[0], origin_box[1]};
+  uint16_t h_subbox = h_box / n_ver, w_subbox = w_box / n_hor;
+
+  // Copy the creation timestamp (stays the same)
+  output->ts = input->ts;
+
+  // Go trough all the pixels
+  // origin_box is defined as [row, col] of the top left corner of the box
+  for (uint16_t y = origin_box[1]; y < origin_box[1]+w_box; y++) {
+    for (uint16_t x = origin_box[0]-h_box; x < origin_box; x += 2) {
+      // Check if the color is inside the specified values
+      if (
+          (dest[1] >= y_m)
+          && (dest[1] <= y_M)
+          && (dest[0] >= u_m)
+          && (dest[0] <= u_M)
+          && (dest[2] >= v_m)
+          && (dest[2] <= v_M)
+          ) {
+
+        // UYVY
+        dest[0] = 64;        // U
+        dest[1] = source[1];  // Y
+        dest[2] = 255;        // V
+        dest[3] = source[3];  // Y
+
+        // Loop through boxes in search box
+        int flag = 0;
+        for (uint8_t i_subbox = 0; i_subbox < n_ver; i_subbox++) {
+          for (uint8_t j_subbox = 0; j_subbox < n_hor; j_subbox++) {
+
+            if ((y >= origin_subbox[1])
+                && (y < origin_subbox[1] + w_subbox)
+                && (x >= origin_subbox[0] - h_subbox)
+                && (x < origin_subbox[0])) {
+
+              cnts[i_subbox][j_subbox]++;
+              flag = 1;
+              break;
+            }
+            origin_subbox[1] += w_subbox;
+          }
+          if (flag) break;
+          origin_subbox[0] -= h_subbox;
+        }
+        flag = 0;
+        origin_subbox[0] = origin_box[0];
+        origin_subbox[1] = origin_box[1];
+      }
+    }
+  }
+}
+
+
 
 /**
 * Simplified high-speed low CPU downsample function without averaging

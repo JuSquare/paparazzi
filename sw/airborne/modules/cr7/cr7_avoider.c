@@ -32,6 +32,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void fullStopRotate(void);
+
 void cr7_avoid_periodic()
 {
 	float moveDistance = 0.5;
@@ -52,6 +54,7 @@ void cr7_avoid_periodic()
 		} else if(fullStop)
 		{
 			waypoint_set_here_2d(WP_GOAL);
+			fullStopRotate();
 //			printf("ERROR, FULL STOP\n");
 		}
 //	If no obstacle is found, set waypoint GOAL forward
@@ -77,6 +80,15 @@ static uint8_t calculateForwards(struct EnuCoor_i *new_coor, float distanceMeter
   new_coor->x                       = pos->x + POS_BFP_OF_REAL(sin_heading * (distanceMeters));
   new_coor->y                       = pos->y + POS_BFP_OF_REAL(cos_heading * (distanceMeters));
   return false;
+}
+
+void fullStopRotate(void)
+{
+	float headingChange 			= 1.57;
+	struct Int32Eulers *eulerAngles = stateGetNedToBodyEulers_i();
+
+	nav_set_heading_rad(ANGLE_FLOAT_OF_BFP(eulerAngles->psi) - headingChange);
+	return;
 }
 
 static uint8_t calculateLeft(struct EnuCoor_i *new_coor, float distanceMeters)
