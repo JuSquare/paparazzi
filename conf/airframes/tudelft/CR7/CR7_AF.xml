@@ -104,15 +104,24 @@
     <set servo="BOTTOM_LEFT" value="motor_mixing.commands[MOTOR_BACK_LEFT]"/>
   </command_laws>
 
-  <!-- Cyberzoo bebop1 values -->
+  <!-- Cyberzoo values -->
   <section name="COLORFILTER" prefix="CR7_VISION_">
-    <define name="LUM_MIN" value="60"/><!--20"/>-->
-    <define name="LUM_MAX" value="140"/><!--180"/>-->
-    <define name="CB_MIN" value="50"/><!--75"/-->
-    <define name="CB_MAX" value="100"/><!--145"/-->
-    <define name="CR_MIN" value="40"/><!--167"/-->
-    <define name="CR_MAX" value="135"/><!--255"/-->
+    <define name="LUM_MIN" value="5"/>
+    <define name="LUM_MAX" value="166"/>
+    <define name="CB_MIN" value="25"/>
+    <define name="CB_MAX" value="130"/>
+    <define name="CR_MIN" value="33"/>
+    <define name="CR_MAX" value="132"/>
   </section>
+  <!-- Simulation values -->
+<!--   <section name="COLORFILTER" prefix="CR7_VISION_">
+    <define name="LUM_MIN" value="60"/>
+    <define name="LUM_MAX" value="140"/>
+    <define name="CB_MIN" value="50"/>
+    <define name="CB_MAX" value="100"/>
+    <define name="CR_MIN" value="40"/>
+    <define name="CR_MAX" value="135"/>
+  </section> -->
 
   <section name="AIR_DATA" prefix="AIR_DATA_">
     <define name="CALC_AIRSPEED" value="FALSE"/>

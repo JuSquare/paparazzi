@@ -334,9 +334,9 @@ uint16_t image_yuv422_colorfilt_box(struct image_t *input, struct image_t *outpu
         && (dest[0] <= u_M)
         && (dest[2] >= v_m)
         && (dest[2] <= v_M)
-        && (y >= 100)
-        && (y <= 444)
-        && (x <= 120)
+        && (y >= 125)
+        && (y <= 419)
+        && (x <= 140)
 
       ) {
         cnt ++;
