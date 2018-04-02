@@ -29,8 +29,8 @@
 #include <stdint.h>
 #include "modules/computer_vision/cv.h"
 
-#define VER_SUBBOXES 1
-#define HOR_SUBBOXES 5  // only odd numbers
+#define VER_SUBBOXES 2
+#define HOR_SUBBOXES 4  // only odd numbers
 
 // Module functions
 extern void colorfilter_init(void);
@@ -45,8 +45,7 @@ extern uint8_t color_cb_max;
 extern uint8_t color_cr_min;
 extern uint8_t color_cr_max;
 
-extern int color_count;
-
+extern uint16_t color_count;
 
 extern uint16_t ctr;
 extern uint16_t ctl;

@@ -50,6 +50,12 @@ uint8_t color_cb_max  = 93;//140;
 uint8_t color_cr_min  = 63;//180;
 uint8_t color_cr_max  = 105;//255;
 
+// Search box sizes
+uint16_t origin_box[2] = {200, 125};
+uint16_t h_box = 200;
+uint16_t w_box = 294;
+
+
 // Result
 uint16_t color_count = 0;
 uint16_t color_count_boxes[VER_SUBBOXES][HOR_SUBBOXES] = {0};
@@ -119,13 +125,13 @@ struct image_t *colorfilter_func(struct image_t *img)
                                        color_cr_min, color_cr_max, &ctr, &ctl
                                       );
 
-  color_count_boxes = image_yuv422_colorfilt_multibox(img, img,
-                                                      VER_SUBBOXES, HOR_SUBBOXES,
-                                                      color_count_boxes, origin_box,
-                                                      h_box, w_box,
-                                                      color_lum_min, color_lum_max,
-                                                      color_cb_min, color_cb_max,
-                                                      color_cr_min, color_cr_max
+  image_yuv422_colorfilt_multibox(img, img,
+                                  VER_SUBBOXES, HOR_SUBBOXES,
+                                  color_count_boxes, origin_box,
+                                  h_box, w_box,
+                                  color_lum_min, color_lum_max,
+                                  color_cb_min, color_cb_max,
+                                  color_cr_min, color_cr_max
   );
   for (int i_print = 0; i_print < VER_SUBBOXES; i_print++) {
     for (int j_print = 0; j_print < HOR_SUBBOXES; j_print++) {
