@@ -422,7 +422,7 @@ void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *outp
           for (uint8_t j_subbox = 0; j_subbox < n_hor; j_subbox++) {
 
             printf("%d, %d\n", i_subbox, j_subbox);
-            printf("Vertical: [%d, %d], Horizontal: [%d, %d]", origin_subbox[0] - h_subbox, origin_subbox[0], origin_subbox[1], origin_subbox[1] + w_subbox);
+            printf("Vertical: [%d, %d], Horizontal: [%d, %d]\n", origin_subbox[0] - h_subbox, origin_subbox[0], origin_subbox[1], origin_subbox[1] + w_subbox);
 
             if ((y >= origin_subbox[1])
                 && (y < origin_subbox[1] + w_subbox)
@@ -437,14 +437,14 @@ void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *outp
             printf("Add to w_subbox\n");
             origin_subbox[1] += w_subbox;
           }
-          printf("Flag is %d\n", flag);
+          printf("Flag is %d\n, new row", flag);
+          origin_subbox[1] = origin_box[1];
           if (flag) break;
           origin_subbox[0] -= h_subbox;
         }
         printf("Reset all\n");
         flag = 0;
         origin_subbox[0] = origin_box[0];
-        origin_subbox[1] = origin_box[1];
 
       }
     }
