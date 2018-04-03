@@ -414,7 +414,7 @@ void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *outp
         dest[2] = 255;        // V
         dest[3] = source[3];  // Y
 
-        printf("Found one!\n");
+        printf("Found one, (%d, %d)!\n", x, y);
 
         // Loop through boxes in search box
         int flag = 0;
@@ -422,6 +422,7 @@ void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *outp
           for (uint8_t j_subbox = 0; j_subbox < n_hor; j_subbox++) {
 
             printf("%d, %d\n", i_subbox, j_subbox);
+            printf("Vertical: [%d, %d], Horizontal: [%d, %d]", origin_subbox[0] - h_subbox, origin_subbox[0], origin_subbox[1], origin_subbox[1] + w_subbox);
 
             if ((y >= origin_subbox[1])
                 && (y < origin_subbox[1] + w_subbox)
