@@ -43,19 +43,18 @@ void cr7_avoid_periodic()
 //		If obstacle, go left
 		if(goLeft)
 		{
-//			printf("GOING LEFT\n");
+			printf("GOING LEFT\n");
 			moveWaypointLeft(WP_GOAL, moveDistance);
 //		Or if obstacle, go right (depends on vision part)
 		} else if(goRight)
 		{
-//			printf("GOING RIGHT\n");
+			printf("GOING RIGHT\n");
 			moveWaypointRight(WP_GOAL, moveDistance);
-//		EMERGENCY STOP
 		} else if(fullStop)
 		{
 			waypoint_set_here_2d(WP_GOAL);
 			fullStopRotate();
-//			printf("ERROR, FULL STOP\n");
+			printf("ERROR, FULL STOP\n");
 		}
 //	If no obstacle is found, set waypoint GOAL forward
 	} else
@@ -82,9 +81,15 @@ static uint8_t calculateForwards(struct EnuCoor_i *new_coor, float distanceMeter
   return false;
 }
 
-void fullStopRotate(void)
+float float_rand( float min, float max )
 {
-	float headingChange 			= 1.57;
+    float scale = rand() / (float) RAND_MAX; /* [0, 1.0] */
+    return min + scale * ( max - min );      /* [min, max] */
+}
+
+void fullStopRotate()
+{
+	float headingChange 			= float_rand(0.5, 1.0);
 	struct Int32Eulers *eulerAngles = stateGetNedToBodyEulers_i();
 
 	nav_set_heading_rad(ANGLE_FLOAT_OF_BFP(eulerAngles->psi) - headingChange);
