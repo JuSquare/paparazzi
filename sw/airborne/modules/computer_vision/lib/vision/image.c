@@ -395,10 +395,8 @@ void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *outp
 
   // Go trough all the pixels
   // origin_box is defined as [row, col] of the top left corner of the box
-  for (uint16_t y = origin_box[1]; y < origin_box[1]+w_box; y++) {
-    for (uint16_t x = origin_box[0]-h_box; x < origin_box[0]; x += 2) {
-      for (uint16_t y = 0; y < output->h; y++) {
-        for (uint16_t x = 0; x < output->w; x += 2) {
+  for (uint16_t y = 0; y < output->h; y++) {
+    for (uint16_t x = 0; x < output->w; x += 2) {
 
       // Check if the color is inside the specified values
       if (
