@@ -32,27 +32,14 @@
 
 // Action parameters
 uint8_t goLeft, goRight, obstacle, fullStop;
-// Decision parameters bottom
-//int16_t greenLeft_bottom = 0;
-//int16_t greenRight_bottom = 0;
-//int16_t decisionThreshold_bottom = 2000;
-//int16_t countThreshold_bottom = 5000;
-//// Decision parameters top
-//int16_t greenLeft_top = 0;
-//int16_t greenRight_top = 0;
-//int16_t decisionThreshold_top = 2000;
-//int16_t countThreshold_top = 5000;
 
-int16_t greenLeft = 0;
-int16_t greenRight = 0;
+// Threshold parameters to base decisions on
 float decisionThreshold = 0.05; //percentage of required difference between left colorcount and right colorcount
-uint16_t countThreshold = 5000;
-uint16_t countThresholdTop = 80*86*0.7;
-uint16_t countThresholdBotOuter = 80*86*0.9;
-uint16_t countThresholdBotInner = 80*86*0.95;
+uint16_t countThresholdTop = 50*73*0.2;
+uint16_t countThresholdBotOuter = 50*73*0.9;
+uint16_t countThresholdBotInner = 50*73*0.95;
 
-// David is een beunhaas
-
+// Function to decide to go left or right based on color count left and right
 void LRdecider(int16_t colorLeft, int16_t colorRight)
 {
 	if(colorLeft >= colorRight)
@@ -75,21 +62,25 @@ void LRdecider(int16_t colorLeft, int16_t colorRight)
 }
 
 
+// Main periodic function to decide what to do
 void decide_periodic()
 {
-	greenTopLeft 		= ;
-	greenTopRight 		= ;
-	greenBotInnerLeft 	= ;
-	greenBotInnerRight 	= ;
-	greenBotOuterLeft 	= ;
-	greenBotOuterRight 	= ;
-	greenLeft 			= ctl;
-	greenRight 			= ctr;
+	printf("thresholds: %d, %d, %d\n", countThresholdTop, countThresholdBotInner, countThresholdBotOuter);
+//	Get count values for all different boxes and the full field
+	uint16_t greenTopLeft 		= color_count_boxes[0][1];
+	uint16_t greenTopRight 		= color_count_boxes[0][2];
+	uint16_t greenBotInnerLeft 	= color_count_boxes[1][1];
+	uint16_t greenBotInnerRight = color_count_boxes[1][2];
+	uint16_t greenBotOuterLeft 	= color_count_boxes[1][0];
+	uint16_t greenBotOuterRight = color_count_boxes[1][3];
+	uint16_t greenLeft 			= color_count_boxes[0][0] + color_count_boxes[0][1] + color_count_boxes[1][0] + color_count_boxes[1][1];
+	uint16_t greenRight 		= color_count_boxes[0][2] + color_count_boxes[0][3] + color_count_boxes[1][2] + color_count_boxes[1][3];
 
-	colorCountTop 		= ;
-	colorCountBotInner 	= ;
-	colorCountBotOuter 	= ;
+	uint16_t colorCountTop 		= color_count_boxes[0][1] + color_count_boxes[0][2];
+	uint16_t colorCountBotInner = color_count_boxes[1][1] + color_count_boxes[1][2];
+	uint16_t colorCountBotOuter = color_count_boxes[1][0] + color_count_boxes[1][3];
 
+//	First decider for making a fullStop manoeuvre  if any of the colorcount in the boxes is smaller than the threshold
 	if(colorCountTop < countThresholdTop ||
 			colorCountBotInner < countThresholdBotInner ||
 			colorCountBotOuter < countThresholdBotOuter)
@@ -98,10 +89,12 @@ void decide_periodic()
 		goLeft 		= 0;
 		goRight 	= 0;
 		fullStop 	= 1;
+//	If no fullStop manoeuvre is required check which side has the most green and go there
 	} else if(abs(greenLeft - greenRight) > (int)(decisionThreshold*color_count))
 	{
 		obstacle 	= 1;
 		LRdecider(greenLeft, greenRight);
+//	If there is no significant difference just continue straight
 	} else
 	{
 		obstacle 	= 0;

@@ -51,8 +51,8 @@ uint8_t color_cr_min  = 63;//180;
 uint8_t color_cr_max  = 105;//255;
 
 // Search box sizes
-uint16_t origin_box[2] = {200, 125};
-uint16_t h_box = 200;
+uint16_t origin_box[2] = {100, 125};
+uint16_t h_box = 100;
 uint16_t w_box = 294;
 
 
