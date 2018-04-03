@@ -420,40 +420,39 @@ void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *outp
         dest[2] = 255;        // V
         dest[3] = source[3];  // Y
 
-//        printf("Found one, (%d, %d)!\n", x, y);
-
         // Loop through boxes in search box
         int flag = 0;
         for (uint8_t i_subbox = 0; i_subbox < n_ver; i_subbox++) {
           for (uint8_t j_subbox = 0; j_subbox < n_hor; j_subbox++) {
-
-//            printf("%d, %d\n", i_subbox, j_subbox);
-//            printf("Vertical: [%d, %d], Horizontal: [%d, %d]\n", origin_subbox[0] - h_subbox, origin_subbox[0], origin_subbox[1], origin_subbox[1] + w_subbox);
 
             if ((y >= origin_subbox[1])
                 && (y < origin_subbox[1] + w_subbox)
                 && (x >= origin_subbox[0] - h_subbox)
                 && (x < origin_subbox[0])) {
 
+              // Add pixel to box count
               cnts[i_subbox][j_subbox]++;
-//              printf("Found another, first break!\n");
+              // Set flag to break out of double loop
               flag = 1;
               break;
             }
-//            printf("Add to w_subbox\n");
+            // Go to next column
             origin_subbox[1] += w_subbox;
           }
-//          printf("Flag is %d, new row\n", flag);
+          // Reset column
           origin_subbox[1] = origin_box[1];
+          // Break if pixel was added to a box
           if (flag) break;
+          // Go to next row
           origin_subbox[0] -= h_subbox;
         }
-//        printf("Reset all\n");
+        // Reset all
         flag = 0;
         origin_subbox[0] = origin_box[0];
         origin_subbox[1] = origin_box[1];
       }
-      // Go to the next 2 pixels
+
+      // Go to the next pixels, stride of 2?
       dest += 4;
       source += 4;
     }
