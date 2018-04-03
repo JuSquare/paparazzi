@@ -54,7 +54,7 @@ extern float avgl;
 extern float avgr;
 
 
-void arrshifter(uint16_t ctr, uint16_t ctl, uint16_t i, uint16_t j, uint16_t array[J][I], float *avgl, float *avgr);
+void arrshifter(uint16_t ctr, uint16_t ctl, uint8_t i, uint8_t j, uint16_t array[J][I], float *avgl, float *avgr);
 
 extern struct video_listener *listener;
 

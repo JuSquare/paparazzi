@@ -78,7 +78,7 @@ float avgr = 0;
 
 //function left right shifter
 
-void arrshifter(uint16_t ctr, uint16_t ctl, uint16_t i, uint16_t j, uint16_t array[j][i],float *avgl, float *avgr)//i and j are horizontal and vertical array size subsequently
+void arrshifter(uint16_t ctr, uint16_t ctl, uint8_t i, uint8_t j, uint16_t array[j][i],float *avgl, float *avgr)//i and j are horizontal and vertical array size subsequently
 {	float avg_left=0;
 	float avg_right=0;
 	int u;
@@ -127,8 +127,8 @@ struct image_t *colorfilter_func(struct image_t *img)
 
   image_yuv422_colorfilt_multibox(img, img,
                                   VER_SUBBOXES, HOR_SUBBOXES,
-                                  color_count_boxes, origin_box,
-                                  h_box, w_box,
+                                  color_count_boxes, &ctr, &ctl,
+                                  origin_box, h_box, w_box,
                                   color_lum_min, color_lum_max,
                                   color_cb_min, color_cb_max,
                                   color_cr_min, color_cr_max);

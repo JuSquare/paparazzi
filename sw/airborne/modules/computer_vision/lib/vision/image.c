@@ -378,14 +378,17 @@ uint16_t image_yuv422_colorfilt_box(struct image_t *input, struct image_t *outpu
 
 
 void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *output, uint8_t n_ver, uint8_t n_hor, uint16_t cnts[n_ver][n_hor],
-                                     uint16_t origin_box[2], uint16_t h_box, uint16_t w_box, uint8_t y_m, uint8_t y_M, uint8_t u_m,
-                                     uint8_t u_M, uint8_t v_m, uint8_t v_M)
+                                     uint16_t *cnt_l, uint16_t *cnt_r, uint16_t origin_box[2], uint16_t h_box, uint16_t w_box,
+                                     uint8_t y_m, uint8_t y_M, uint8_t u_m, uint8_t u_M, uint8_t v_m, uint8_t v_M)
 {
   uint8_t *source = input->buf;
   uint8_t *dest = output->buf;
 
   uint16_t origin_subbox[2] = {origin_box[0], origin_box[1]};
   uint16_t h_subbox = h_box / n_ver, w_subbox = w_box / n_hor;
+
+  printf("%d, %d\n", origin_subbox[0], origin_subbox[1]);
+  printf("%d\n%d\n", h_subbox, w_subbox);
 
   // Copy the creation timestamp (stays the same)
   output->ts = input->ts;
@@ -394,6 +397,7 @@ void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *outp
   // origin_box is defined as [row, col] of the top left corner of the box
   for (uint16_t y = origin_box[1]; y < origin_box[1]+w_box; y++) {
     for (uint16_t x = origin_box[0]-h_box; x < origin_box; x += 2) {
+
       // Check if the color is inside the specified values
       if (
           (dest[1] >= y_m)
@@ -410,10 +414,14 @@ void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *outp
         dest[2] = 255;        // V
         dest[3] = source[3];  // Y
 
+        printf("Found one!\n");
+
         // Loop through boxes in search box
         int flag = 0;
         for (uint8_t i_subbox = 0; i_subbox < n_ver; i_subbox++) {
           for (uint8_t j_subbox = 0; j_subbox < n_hor; j_subbox++) {
+
+            printf("%d, %d\n", i_subbox, j_subbox);
 
             if ((y >= origin_subbox[1])
                 && (y < origin_subbox[1] + w_subbox)
@@ -421,17 +429,22 @@ void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *outp
                 && (x < origin_subbox[0])) {
 
               cnts[i_subbox][j_subbox]++;
+              printf("Found another, first break!\n");
               flag = 1;
               break;
             }
+            printf("Add to w_subbox\n");
             origin_subbox[1] += w_subbox;
           }
+          printf("Flag is %d\n", flag);
           if (flag) break;
           origin_subbox[0] -= h_subbox;
         }
+        printf("Reset all\n");
         flag = 0;
         origin_subbox[0] = origin_box[0];
         origin_subbox[1] = origin_box[1];
+
       }
     }
   }
