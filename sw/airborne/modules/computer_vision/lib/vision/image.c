@@ -381,6 +381,8 @@ void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *outp
                                      uint16_t origin_box[2], uint16_t h_box, uint16_t w_box,
                                      uint8_t y_m, uint8_t y_M, uint8_t u_m, uint8_t u_M, uint8_t v_m, uint8_t v_M)
 {
+  memset(cnts, 0, sizeof(cnts[0][0]) * n_ver * n_hor);
+
   uint8_t *source = input->buf;
   uint8_t *dest = output->buf;
 
