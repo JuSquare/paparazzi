@@ -311,96 +311,97 @@ uint16_t image_yuv422_section(struct image_t *input, struct image_t *output, uin
   return cnt;
 }
 */
-uint16_t image_yuv422_colorfilt_box(struct image_t *input, struct image_t *output, uint8_t y_m, uint8_t y_M, uint8_t u_m,
-                                uint8_t u_M, uint8_t v_m, uint8_t v_M, uint16_t *count_p_r, uint16_t *count_p_l)
-{
-  uint16_t cnt = 0;
-  uint16_t cnt_r = 0;
-  uint16_t cnt_l = 0;
-  uint8_t *source = input->buf;
-  uint8_t *dest = output->buf;
-
-  // Copy the creation timestamp (stays the same)
-  output->ts = input->ts;
-
-  // Go trough all the pixels
-  for (uint16_t y = 0; y < output->h; y++) {
-    for (uint16_t x = 0; x < output->w; x += 2) {
-      // Check if the color is inside the specified values
-      if (
-        (dest[1] >= y_m)
-        && (dest[1] <= y_M)
-        && (dest[0] >= u_m)
-        && (dest[0] <= u_M)
-        && (dest[2] >= v_m)
-        && (dest[2] <= v_M)
-        && (y >= 125)
-        && (y <= 419)
-        && (x <= 140)
-
-      ) {
-        cnt ++;
-        // UYVY
-        dest[0] = 64;        // U
-        dest[1] = source[1];  // Y
-        dest[2] = 255;        // V
-        dest[3] = source[3];  // Y
-
-        if(
-			y>=272){  //half width of image (?)
-				cnt_r ++;
-			}
-        else{
-				cnt_l++;
-			}
-      } else {
-        // UYVY
-        char u = source[0] - 127;
-        u /= 4;
-        dest[0] = 127;        // U
-        dest[1] = source[1];  // Y
-        u = source[2] - 127;
-        u /= 4;
-        dest[2] = 127;        // V
-        dest[3] = source[3];  // Y
-      }
-
-      // Go to the next 2 pixels
-      dest += 4;
-      source += 4;
-
-      *count_p_r = cnt_r;
-      *count_p_l = cnt_l;
-    }
-  }
-  return cnt;
-}
+//uint16_t image_yuv422_colorfilt_box(struct image_t *input, struct image_t *output, uint8_t y_m, uint8_t y_M, uint8_t u_m,
+//                                uint8_t u_M, uint8_t v_m, uint8_t v_M, uint16_t *count_p_r, uint16_t *count_p_l)
+//{
+//  uint16_t cnt = 0;
+//  uint16_t cnt_r = 0;
+//  uint16_t cnt_l = 0;
+//  uint8_t *source = input->buf;
+//  uint8_t *dest = output->buf;
+//
+//  // Copy the creation timestamp (stays the same)
+//  output->ts = input->ts;
+//
+//  // Go trough all the pixels
+//  for (uint16_t y = 0; y < output->h; y++) {
+//    for (uint16_t x = 0; x < output->w; x += 2) {
+//      // Check if the color is inside the specified values
+//      if (
+//        (dest[1] >= y_m)
+//        && (dest[1] <= y_M)
+//        && (dest[0] >= u_m)
+//        && (dest[0] <= u_M)
+//        && (dest[2] >= v_m)
+//        && (dest[2] <= v_M)
+//        && (y >= 125)
+//        && (y <= 419)
+//        && (x <= 140)
+//
+//      ) {
+//        cnt ++;
+//        // UYVY
+//        dest[0] = 64;        // U
+//        dest[1] = source[1];  // Y
+//        dest[2] = 255;        // V
+//        dest[3] = source[3];  // Y
+//
+//        if(
+//			y>=272){  //half width of image (?)
+//				cnt_r ++;
+//			}
+//        else{
+//				cnt_l++;
+//			}
+//      } else {
+//        // UYVY
+//        char u = source[0] - 127;
+//        u /= 4;
+//        dest[0] = 127;        // U
+//        dest[1] = source[1];  // Y
+//        u = source[2] - 127;
+//        u /= 4;
+//        dest[2] = 127;        // V
+//        dest[3] = source[3];  // Y
+//      }
+//
+//      // Go to the next 2 pixels
+//      dest += 4;
+//      source += 4;
+//
+//      *count_p_r = cnt_r;
+//      *count_p_l = cnt_l;
+//    }
+//  }
+//  return cnt;
+//}
 
 
 void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *output, uint8_t n_ver, uint8_t n_hor, uint16_t cnts[n_ver][n_hor],
                                      uint16_t origin_box[2], uint16_t h_box, uint16_t w_box,
                                      uint8_t y_m, uint8_t y_M, uint8_t u_m, uint8_t u_M, uint8_t v_m, uint8_t v_M)
 {
+  // Reset all counts to 0
   memset(cnts, 0, sizeof(cnts[0][0]) * n_ver * n_hor);
 
+  // Define buffers to read pixels
   uint8_t *source = input->buf;
   uint8_t *dest = output->buf;
 
+  // Set the origin of subbox equal to origin of box
+  // Origin is defined as top left
   uint16_t origin_subbox[2] = {origin_box[0], origin_box[1]};
+  // Divide by number of boxes in both dimensions to get height and width of subboxes
   uint16_t h_subbox = h_box / n_ver, w_subbox = w_box / n_hor;
-
-//  printf("%d, %d\n", origin_subbox[0], origin_subbox[1]);
-//  printf("%d\n%d\n", h_subbox, w_subbox);
 
   // Copy the creation timestamp (stays the same)
   output->ts = input->ts;
 
   // Go trough all the pixels
-  // origin_box is defined as [row, col] of the top left corner of the box
   for (uint16_t y = 0; y < output->h; y++) {
     for (uint16_t x = 0; x < output->w; x += 2) {
 
-      // Check if the color is inside the specified values
+      // Check if the color is inside the specified values and inside box
       if (
           (dest[1] >= y_m)
           && (dest[1] <= y_M)
@@ -451,7 +452,6 @@ void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *outp
         origin_subbox[0] = origin_box[0];
         origin_subbox[1] = origin_box[1];
       }
-
       // Go to the next pixels, stride of 2?
       dest += 4;
       source += 4;
