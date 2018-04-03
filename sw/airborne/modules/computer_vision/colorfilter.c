@@ -133,10 +133,18 @@ struct image_t *colorfilter_func(struct image_t *img)
                                   color_cb_min, color_cb_max,
                                   color_cr_min, color_cr_max);
 
+  uint8_t color[3] = {0, 255, 0};
+  uint16_t w_subbox = w_box / HOR_SUBBOXES;
+  uint16_t h_subbox = h_box / VER_SUBBOXES;
+
   for (int i_print = 0; i_print < VER_SUBBOXES; i_print++) {
     for (int j_print = 0; j_print < HOR_SUBBOXES; j_print++) {
 
-      printf("Box %d: %d", i_print*VER_SUBBOXES + j_print, color_count_boxes[i_print][j_print]);
+      uint16_t x_subbox = origin_box[1] + j_print*w_subbox;
+      uint16_t y_subbox = origin_box[0] - i_print*h_subbox;
+
+      printf("Box %d: %d", i_print*VER_SUBBOXES + j_print*HOR_SUBBOXES, color_count_boxes[i_print][j_print]);
+      image_draw_rectangle(img, y_subbox-h_subbox, y_subbox, x_subbox, x_subbox+w_subbox, color);
       color_count += color_count_boxes[i_print][j_print];
     }
   }
