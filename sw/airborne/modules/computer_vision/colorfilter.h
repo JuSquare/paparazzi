@@ -32,6 +32,12 @@
 #define J 2
 #define I 10
 
+#ifndef VER_SUBBOXES
+#define VER_SUBBOXES 2
+
+#ifndef HOR_SUBBOXES
+#define HOR_SUBBOXES 4
+
 // Module functions
 extern void colorfilter_init(void);
 struct image_t *colorfilter_func(struct image_t *img);
@@ -46,6 +52,7 @@ extern uint8_t color_cr_min;
 extern uint8_t color_cr_max;
 
 extern uint16_t color_count;
+extern uint16_t color_count_boxes[VER_SUBBOXES][HOR_SUBBOXES];
 
 extern uint16_t ctr;
 extern uint16_t ctl;

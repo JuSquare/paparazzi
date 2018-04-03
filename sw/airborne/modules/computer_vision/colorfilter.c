@@ -137,8 +137,8 @@ struct image_t *colorfilter_func(struct image_t *img)
   uint16_t w_subbox = w_box / HOR_SUBBOXES;
   uint16_t h_subbox = h_box / VER_SUBBOXES;
 
-  for (int i_print = 0; i_print < VER_SUBBOXES; i_print++) {
-    for (int j_print = 0; j_print < HOR_SUBBOXES; j_print++) {
+  for (uint8_t i_print = 0; i_print < VER_SUBBOXES; i_print++) {
+    for (uint8_t j_print = 0; j_print < HOR_SUBBOXES; j_print++) {
 
       uint16_t x_subbox = origin_box[1] + j_print*w_subbox;
       uint16_t y_subbox = origin_box[0] - i_print*h_subbox;
