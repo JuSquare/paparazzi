@@ -34,9 +34,11 @@
 
 #ifndef VER_SUBBOXES
 #define VER_SUBBOXES 2
+#endif
 
 #ifndef HOR_SUBBOXES
 #define HOR_SUBBOXES 4
+#endif
 
 // Module functions
 extern void colorfilter_init(void);

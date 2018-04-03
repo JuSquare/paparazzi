@@ -127,7 +127,7 @@ struct image_t *colorfilter_func(struct image_t *img)
 
   image_yuv422_colorfilt_multibox(img, img,
                                   VER_SUBBOXES, HOR_SUBBOXES,
-                                  color_count_boxes, &ctr, &ctl,
+                                  color_count_boxes,
                                   origin_box, h_box, w_box,
                                   color_lum_min, color_lum_max,
                                   color_cb_min, color_cb_max,
