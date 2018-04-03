@@ -29,8 +29,12 @@
 #include <stdint.h>
 #include "modules/computer_vision/cv.h"
 
+#define J 2
+#define I 10
+
 // Module functions
 extern void colorfilter_init(void);
+struct image_t *colorfilter_func(struct image_t *img);
 
 extern uint8_t color_lum_min;
 extern uint8_t color_lum_max;
@@ -41,11 +45,16 @@ extern uint8_t color_cb_max;
 extern uint8_t color_cr_min;
 extern uint8_t color_cr_max;
 
-extern int color_count;
+extern uint16_t color_count;
 
 extern uint16_t ctr;
 extern uint16_t ctl;
 
+extern float avgl;
+extern float avgr;
+
+
+void arrshifter(uint16_t ctr, uint16_t ctl, uint16_t i, uint16_t j, uint16_t array[J][I], float *avgl, float *avgr);
 
 extern struct video_listener *listener;
 
