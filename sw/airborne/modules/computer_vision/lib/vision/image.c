@@ -437,7 +437,7 @@ void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *outp
             printf("Add to w_subbox\n");
             origin_subbox[1] += w_subbox;
           }
-          printf("Flag is %d\n, new row", flag);
+          printf("Flag is %d, new row\n", flag);
           origin_subbox[1] = origin_box[1];
           if (flag) break;
           origin_subbox[0] -= h_subbox;
@@ -445,7 +445,10 @@ void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *outp
         printf("Reset all\n");
         flag = 0;
         origin_subbox[0] = origin_box[0];
-
+        origin_subbox[1] = origin_box[1];
+        // Go to the next 2 pixels
+        dest += 4;
+        source += 4;
       }
     }
   }
