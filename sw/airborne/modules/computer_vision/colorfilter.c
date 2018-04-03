@@ -78,7 +78,7 @@ float avgr = 0;
 
 //function left right shifter
 
-void arrshifter(uint16_t ctr, uint16_t ctl, int i, int j, uint16_t array[j][i],float *avgl, float *avgr)//i and j are horizontal and vertical array size subsequently
+void arrshifter(uint16_t ctr, uint16_t ctl, uint16_t i, uint16_t j, uint16_t array[j][i],float *avgl, float *avgr)//i and j are horizontal and vertical array size subsequently
 {	float avg_left=0;
 	float avg_right=0;
 	int u;

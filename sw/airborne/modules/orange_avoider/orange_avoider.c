@@ -21,8 +21,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define J 2
-#define I 10
 #define ORANGE_AVOIDER_VERBOSE TRUE
 
 #define PRINT(string,...) fprintf(stderr, "[orange_avoider->%s()] " string,__FUNCTION__ , ##__VA_ARGS__)

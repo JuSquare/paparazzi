@@ -29,8 +29,8 @@
 #include <stdint.h>
 #include "modules/computer_vision/cv.h"
 
-#define VER_SUBBOXES 2
-#define HOR_SUBBOXES 4  // only odd numbers
+#define J 2
+#define I 10
 
 // Module functions
 extern void colorfilter_init(void);
@@ -54,7 +54,7 @@ extern float avgl;
 extern float avgr;
 
 
-void arrshifter(uint16_t ctr, uint16_t ctl, int i, int j, uint16_t array[2][10], float *avgl, float *avgr);
+void arrshifter(uint16_t ctr, uint16_t ctl, uint16_t i, uint16_t j, uint16_t array[J][I], float *avgl, float *avgr);
 
 extern struct video_listener *listener;
 
