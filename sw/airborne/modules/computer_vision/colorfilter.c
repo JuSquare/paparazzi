@@ -119,11 +119,11 @@ void arrshifter(uint16_t ctr, uint16_t ctl, uint16_t i, uint16_t j, uint16_t arr
 struct image_t *colorfilter_func(struct image_t *img)
 {
   // Filter
-  color_count = image_yuv422_colorfilt_box(img, img,
-                                       color_lum_min, color_lum_max,
-                                       color_cb_min, color_cb_max,
-                                       color_cr_min, color_cr_max, &ctr, &ctl
-                                      );
+//  color_count = image_yuv422_colorfilt_box(img, img,
+//                                       color_lum_min, color_lum_max,
+//                                       color_cb_min, color_cb_max,
+//                                       color_cr_min, color_cr_max, &ctr, &ctl
+//                                      );
 
   image_yuv422_colorfilt_multibox(img, img,
                                   VER_SUBBOXES, HOR_SUBBOXES,
@@ -131,12 +131,13 @@ struct image_t *colorfilter_func(struct image_t *img)
                                   h_box, w_box,
                                   color_lum_min, color_lum_max,
                                   color_cb_min, color_cb_max,
-                                  color_cr_min, color_cr_max
-  );
+                                  color_cr_min, color_cr_max);
+
   for (int i_print = 0; i_print < VER_SUBBOXES; i_print++) {
     for (int j_print = 0; j_print < HOR_SUBBOXES; j_print++) {
 
       printf("Box %d: %d", i_print*VER_SUBBOXES + j_print, color_count_boxes[i_print][j_print]);
+      color_count += color_count_boxes[i_print][j_print];
     }
   }
   //printf("Count right: %d", *count_p_r);
