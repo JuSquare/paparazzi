@@ -55,7 +55,6 @@ uint16_t origin_box[2] = {80, 110};
 uint16_t h_box = 80;
 uint16_t w_box = 300;
 
-
 // Result
 uint16_t color_count = 0;
 uint16_t color_count_boxes[VER_SUBBOXES][HOR_SUBBOXES] = {0};
