@@ -150,31 +150,21 @@ void image_to_grayscale(struct image_t *input, struct image_t *output)
  * @param[in] v_M The V maximum value
  * @return The amount of filtered pixels
  */
-
-
 uint16_t image_yuv422_colorfilt(struct image_t *input, struct image_t *output, uint8_t y_m, uint8_t y_M, uint8_t u_m,
                                 uint8_t u_M, uint8_t v_m, uint8_t v_M)
 {
-
   uint16_t cnt = 0;
-
-  uint16_t cnt_l;
-  uint16_t cnt_r;
-  //uint16_t *cnt_l_p;
-  //uint16_t *cnt_r_p;
-
-
 
   uint8_t *source = (uint8_t *)input->buf;
   uint8_t *dest = (uint8_t *)output->buf;
 
   // Copy the creation timestamp (stays the same)
   output->ts = input->ts;
-  //printf("size of source %lu ", sizeof(source));
+
   // Go through all the pixels
   for (uint16_t y = 0; y < output->h; y++) {
-
     for (uint16_t x = 0; x < output->w; x += 2) {
+
       // Check if the color is inside the specified values
     	if (
         (dest[1] >= y_m)
@@ -190,16 +180,6 @@ uint16_t image_yuv422_colorfilt(struct image_t *input, struct image_t *output, u
         dest[1] = source[1];  // Y
         dest[2] = 255;        // V
         dest[3] = source[3];  // Y
-        if(
-			x>=272){  //half width of image (?)
-				cnt_r ++;
-			}
-			if(
-				x<=272
-				){
-				cnt_l++;
-			}
-
       }
     	else {
         // UYVY
@@ -218,167 +198,28 @@ uint16_t image_yuv422_colorfilt(struct image_t *input, struct image_t *output, u
       source += 4;
     }
   }
-  //printf("Count left: %d \n", cnt_l);
-  //printf("Count right: %d \n", cnt_r);
-  //cnt_l_p=&cnt_l;
-  //cnt_r_p=&cnt_r;
-
   return cnt;
 }
 
-
 /**
- * Filter colors in an YUV422 image
+ * Filter colors in an YUV422 image within a certain box, which is divided into multiple subboxes
  * @param[in] *input The input image to filter
  * @param[out] *output The filtered output image
+ * @param[in] n_ver The number of subboxes in the vertical direction
+ * @param[in] n_hor The number of subboxes in the horizontal direction
+ * @param[out] cnts[n_ver][n_hor] The filtered pixel count per subbox
+ * @param[in] origin_box[2] The origin of the box, top left corner
+ * @param[in] h_box The height of the box
+ * @param[in] w_box The width of the box
  * @param[in] y_m The Y minimum value
  * @param[in] y_M The Y maximum value
  * @param[in] u_m The U minimum value
  * @param[in] u_M The U maximum value
  * @param[in] v_m The V minimum value
  * @param[in] v_M The V maximum value
- * @return The amount of filtered pixels
  */
-
-
-
-/*
-uint16_t image_yuv422_section(struct image_t *input, struct image_t *output, uint8_t y_m, uint8_t y_M, uint8_t u_m,
-                                uint8_t u_M, uint8_t v_m, uint8_t v_M, uint16_t *count_p_r)
-{
-  uint16_t cnt = 0;
-  uint8_t *source = (uint8_t *)input->buf;
-  uint8_t *dest = (uint8_t *)output->buf;
-  uint16_t cnt_l = 0;
-  uint16_t cnt_r = 0;
-  typedef struct
-  {
-  		uint16_t cnt;
-  		uint16_t cnt_l;
-  		uint16_t cnt_r;
-  }cnters;
-
-  // Copy the creation timestamp (stays the same)
-  output->ts = input->ts;
-  printf("size of source %lu ", sizeof(source));
-  // Go trough all the pixels
-  for (uint16_t y = 0; y < output->h; y++) {
-    for (uint16_t x = 0; x < output->w; x += 2) {
-      // Check if the color is inside the specified values
-      if (
-        (dest[1] >= y_m)
-        && (dest[1] <= y_M)
-        && (dest[0] >= u_m)
-        && (dest[0] <= u_M)
-        && (dest[2] >= v_m)
-        && (dest[2] <= v_M)
-      ) {
-        cnt ++;
-        // UYVY
-        dest[0] = 64;        // U
-        dest[1] = source[1];  // Y
-        dest[2] = 255;        // V
-        dest[3] = source[3];  // Y
-        if(
-        			y>=272){  //half width of image (?)
-        				cnt_r ++;
-        			}
-        			if(
-        				y<=272
-        				){
-        				cnt_l++;
-        			}
-      } else {
-        // UYVY
-        char u = source[0] - 127;
-        u /= 4;
-        dest[0] = 127;        // U
-        dest[1] = source[1];  // Y
-        u = source[2] - 127;
-        u /= 4;
-        dest[2] = 127;        // V
-        dest[3] = source[3];  // Y
-      }
-
-      // Go to the next 2 pixels
-      dest += 4;
-      source += 4;
-    }
-  }
-  //cnters p = {cnt, cnt_l, cnt_r};
-  //return p;
-  *count_p_r = cnt_r;
-  return cnt;
-}
-*/
-//uint16_t image_yuv422_colorfilt_box(struct image_t *input, struct image_t *output, uint8_t y_m, uint8_t y_M, uint8_t u_m,
-//                                uint8_t u_M, uint8_t v_m, uint8_t v_M, uint16_t *count_p_r, uint16_t *count_p_l)
-//{
-//  uint16_t cnt = 0;
-//  uint16_t cnt_r = 0;
-//  uint16_t cnt_l = 0;
-//  uint8_t *source = input->buf;
-//  uint8_t *dest = output->buf;
-//
-//  // Copy the creation timestamp (stays the same)
-//  output->ts = input->ts;
-//
-//  // Go trough all the pixels
-//  for (uint16_t y = 0; y < output->h; y++) {
-//    for (uint16_t x = 0; x < output->w; x += 2) {
-//      // Check if the color is inside the specified values
-//      if (
-//        (dest[1] >= y_m)
-//        && (dest[1] <= y_M)
-//        && (dest[0] >= u_m)
-//        && (dest[0] <= u_M)
-//        && (dest[2] >= v_m)
-//        && (dest[2] <= v_M)
-//        && (y >= 125)
-//        && (y <= 419)
-//        && (x <= 140)
-//
-//      ) {
-//        cnt ++;
-//        // UYVY
-//        dest[0] = 64;        // U
-//        dest[1] = source[1];  // Y
-//        dest[2] = 255;        // V
-//        dest[3] = source[3];  // Y
-//
-//        if(
-//			y>=272){  //half width of image (?)
-//				cnt_r ++;
-//			}
-//        else{
-//				cnt_l++;
-//			}
-//      } else {
-//        // UYVY
-//        char u = source[0] - 127;
-//        u /= 4;
-//        dest[0] = 127;        // U
-//        dest[1] = source[1];  // Y
-//        u = source[2] - 127;
-//        u /= 4;
-//        dest[2] = 127;        // V
-//        dest[3] = source[3];  // Y
-//      }
-//
-//      // Go to the next 2 pixels
-//      dest += 4;
-//      source += 4;
-//
-//      *count_p_r = cnt_r;
-//      *count_p_l = cnt_l;
-//    }
-//  }
-//  return cnt;
-//}
-
-
-void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *output, uint8_t n_ver, uint8_t n_hor, uint16_t cnts[n_ver][n_hor],
-                                     uint16_t origin_box[2], uint16_t h_box, uint16_t w_box,
+void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *output, uint8_t n_ver, uint8_t n_hor,
+                                     uint16_t cnts[n_ver][n_hor], uint16_t origin_box[2], uint16_t h_box, uint16_t w_box,
                                      uint8_t y_m, uint8_t y_M, uint8_t u_m, uint8_t u_M, uint8_t v_m, uint8_t v_M)
 {
   // Reset all counts to 0
@@ -452,13 +293,12 @@ void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *outp
         origin_subbox[0] = origin_box[0];
         origin_subbox[1] = origin_box[1];
       }
-      // Go to the next pixels, stride of 2?
+      // Go to the next pixels, stride of 2
       dest += 4;
       source += 4;
     }
   }
 }
-
 
 
 /**
