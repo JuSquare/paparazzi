@@ -56,7 +56,7 @@ uint16_t h_box = 150;
 uint16_t w_box = 300;
 
 // Results
-// uint16_t color_count = 0;
+ uint16_t color_count = 0;
 uint16_t color_count_boxes[VER_SUBBOXES][HOR_SUBBOXES] = {0};
 
 #include "subsystems/abi.h"
