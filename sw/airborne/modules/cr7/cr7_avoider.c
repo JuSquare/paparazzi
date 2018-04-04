@@ -40,13 +40,15 @@ void fullStopRotate(void);
 
 void cr7_avoid_periodic()
 {
-	float moveDistance = 0.7;
+//	float moveDistance
+	float moveDistance = 1.1;
 //	Check if there is an obstacle
 	if(obstacle)
 	{
 //		If obstacle, go left
 		if(goLeft)
 		{
+<<<<<<< Updated upstream
 			if(pflagleft){
 			printf("GOING LEFT\n");
 			pflagleft=0;
@@ -55,10 +57,14 @@ void cr7_avoid_periodic()
 			plflagstop=1;
 
 			}
+=======
+			printf("GOING LEFT\n");
+>>>>>>> Stashed changes
 			moveWaypointLeft(WP_GOAL, moveDistance);
 //		Or if obstacle, go right (depends on vision part)
 		} else if(goRight)
 		{
+<<<<<<< Updated upstream
 			if(pflagright){
 						printf("GOING RIGHT\n");
 						pflagleft=1;
@@ -67,11 +73,15 @@ void cr7_avoid_periodic()
 						plflagstop=1;
 
 						}
+=======
+			printf("GOING RIGHT\n");
+>>>>>>> Stashed changes
 			moveWaypointRight(WP_GOAL, moveDistance);
 		} else if(fullStop)
 		{
 			waypoint_set_here_2d(WP_GOAL);
 			fullStopRotate();
+<<<<<<< Updated upstream
 
 			if(plflagstop){
 		printf("FULL STOP \n");
@@ -81,6 +91,9 @@ void cr7_avoid_periodic()
 		plflagstop=0;
 
 									}
+=======
+			printf("ERROR, FULL STOP\n");
+>>>>>>> Stashed changes
 		}
 //	If no obstacle is found, set waypoint GOAL forward
 	} else

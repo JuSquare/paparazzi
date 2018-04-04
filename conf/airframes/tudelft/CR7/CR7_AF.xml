@@ -12,12 +12,12 @@
     </target>
 
     <!-- Front Camera parameters -->
-    <define name="MT9F002_INITIAL_OFFSET_X" value="0.09" /> <!-- Offset from center position [-0.5..0.5]. Set to 0.09 to center horizon. -->
+    <define name="MT9F002_INITIAL_OFFSET_X" value="-0.02" /> <!-- Offset from center position [-0.5..0.5]. Set to 0.09 to center horizon. -->
     <define name="MT9F002_INITIAL_OFFSET_Y" value="0." /> <!-- Offset from center position [-0.5..0.5] -->
     <define name="MT9F002_OUTPUT_WIDTH" value="240" /> <!-- Output dimensions -->
     <define name="MT9F002_OUTPUT_HEIGHT" value="520" /> <!-- Output dimensions -->
     <define name="MT9F002_TARGET_FPS" value="30" />
-    <define name="MT9F002_TARGET_EXPOSURE" value="20" />
+    <define name="MT9F002_TARGET_EXPOSURE" value="200" />
     <define name="MT9F002_GAIN_GREEN1" value="4.0" />
     <define name="MT9F002_GAIN_GREEN2" value="4.0" />
     <define name="MT9F002_GAIN_RED" value="5.0" />
@@ -102,23 +102,23 @@
   </command_laws>
 
   <!-- Cyberzoo values -->
- <!--  <section name="COLORFILTER" prefix="CR7_VISION_">
+  <section name="COLORFILTER" prefix="CR7_VISION_">
     <define name="LUM_MIN" value="5"/>
     <define name="LUM_MAX" value="166"/>
     <define name="CB_MIN" value="25"/>
-    <define name="CB_MAX" value="130"/>
+    <define name="CB_MAX" value="135"/>
     <define name="CR_MIN" value="33"/>
-    <define name="CR_MAX" value="132"/> 
-  </section> -->
+    <define name="CR_MAX" value="133"/> 
+  </section>
   <!-- Simulation values -->
-  <section name="COLORFILTER" prefix="CR7_VISION_">
+<!--   <section name="COLORFILTER" prefix="CR7_VISION_">
     <define name="LUM_MIN" value="60"/>
     <define name="LUM_MAX" value="140"/>
     <define name="CB_MIN" value="50"/>
     <define name="CB_MAX" value="100"/>
     <define name="CR_MIN" value="40"/>
     <define name="CR_MAX" value="135"/>
-  </section>
+  </section> -->
 
   <section name="AIR_DATA" prefix="AIR_DATA_">
     <define name="CALC_AIRSPEED" value="FALSE"/>

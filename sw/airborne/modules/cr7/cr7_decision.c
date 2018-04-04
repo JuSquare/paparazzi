@@ -44,9 +44,9 @@ uint8_t goLeft, goRight, obstacle, fullStop;
 
 // Threshold parameters to base decisions on
 float decisionThreshold = 0.1; //percentage of required difference between left colorcount and right colorcount
-uint16_t countThresholdTop = 40*75*0.05;
-uint16_t countThresholdBotOuter = 40*75*0.1; // 0.2
-uint16_t countThresholdBotInner = 40*75*0.25;
+uint16_t countThresholdTop = 60*75*0.05;
+uint16_t countThresholdBotOuter = 60*75*0.1; // 0.2
+uint16_t countThresholdBotInner = 60*75*0.25;
 
 uint16_t colorCountTopPrev;
 uint16_t colorCountBotInnerPrev;
@@ -76,7 +76,7 @@ void LRdecider(int16_t colorLeft, int16_t colorRight)
 		fullStop 	= 1;
 		printf("ERROR,FULL STOP\n ");
 	}
-//	printf("goLeft = %d, goRight = %d, fullStop = %d\n", goLeft, goRight, fullStop);
+	printf("goLeft = %d, goRight = %d, fullStop = %d\n", goLeft, goRight, fullStop);
 }
 
 
@@ -114,15 +114,15 @@ printf("Threshold top: %d, Threshold bottom inner %d,Threshold bottom outer %d\n
 	printf("top = %.2f, inner bottom = %.2f, outer bottom = %.2f\n", (float)(colorCountTop)/(float)(countThresholdTop),
 																	(float)(colorCountBotInner)/(float)(countThresholdBotInner),
 																	(float)(colorCountBotOuter)/(float)(countThresholdBotOuter));
-	printf("count top = %d, inner bottom = %d, outer bottom = %d\n", colorCountTop,
-																	colorCountBotInner,
-																	colorCountBotOuter);
-	printf("\n");
+//	printf("count top = %d, inner bottom = %d, outer bottom = %d\n", colorCountTop,
+//																	colorCountBotInner,
+//																	colorCountBotOuter);
+//	printf("\n");
 
 	// Maybe only full stop for bottom inner boxes?
 	// First decider for making a fullStop manoeuvre  if any of the colorcount in the boxes is smaller than the threshold
 //	if((colorCountTop < countThresholdTop && colorCountBotInner < countThresholdBotInner) || (colorCountTop < countThresholdTop && colorCountBotOuter < countThresholdBotOuter))
-	if (colorCountTop < countThresholdTop && colorCountBotOuter < countThresholdBotOuter)
+	if (colorCountTop < countThresholdTop && colorCountBotOuter < countThresholdBotOuter || colorCountBotInner < countThresholdBotInner)
 	{
 		obstacle 	= 1;
 		goLeft 		= 0;
@@ -147,6 +147,10 @@ printf("Threshold top: %d, Threshold bottom inner %d,Threshold bottom outer %d\n
 	printf("Left/right difference threshold: %d\n",(int)(decisionThreshold*color_count/2.0f));
 }
 
+//void SpeedDecider(uint16_t colorCount, uint16_t maxColorCount)
+//{
+//	moveDistance = colorCount/maxColorCount * 1.0
+//}
 
 //function left right shifter
 
@@ -187,33 +191,3 @@ void arrshifter(uint16_t ctr, uint16_t ctl, uint8_t i, uint8_t j, uint16_t array
   return;
 }
 
-
-//void decide_periodic()
-//{
-////	greenLeft_bottom 	= ctl_bottom;
-////	greenRight_bottom	= ctr_bottom;
-////	greenLeft_top 		= ctl_top;
-////	greenRight_top 		= ctr_top;
-////	if(color_count_top < countThreshold_top || color_count_bottom < countThreshold_bottom)
-//	greenLeft = ctl;
-//	greenRight = ctr;
-//	printf("TESTETSETS %d\n", (int)(decisionThreshold*color_count));
-//	if(color_count < countThreshold)
-//	{
-//		printf("ALARM\n");
-//		obstacle = 1;
-//		fullStop = 1;
-//	} else if(abs(greenLeft-greenRight) > (int)(decisionThreshold*color_count))
-////	} else if(abs(greenLeft_top-greenRight_top) > decisionThreshold_top || abs(greenLeft_bottom-greenRight_bottom) > decisionThreshold_bottom)
-//	{
-//		printf("OBSTACLE\n");
-//		obstacle = 1;
-//		LRdecider(greenLeft, greenRight);
-//	} else
-//	{
-//		obstacle 	= 0;
-//		goLeft 		= 0;
-//		goRight 	= 0;
-//		fullStop 	= 0;
-//	}
-//}
