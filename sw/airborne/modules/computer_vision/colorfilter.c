@@ -45,10 +45,10 @@ struct video_listener *listener = NULL;
 // Filter settings (if not specified in XML)
 uint8_t color_lum_min = 71;
 uint8_t color_lum_max = 130;
-uint8_t color_cb_min  = 59;
-uint8_t color_cb_max  = 93;
-uint8_t color_cr_min  = 63;
-uint8_t color_cr_max  = 105;
+uint8_t color_cb_min = 59;
+uint8_t color_cb_max = 93;
+uint8_t color_cr_min = 63;
+uint8_t color_cr_max = 105;
 
 // Search box sizes
 uint16_t origin_box[2] = {150, 110};
@@ -62,16 +62,13 @@ uint16_t color_count_boxes[VER_SUBBOXES][HOR_SUBBOXES] = {0};
 #include "subsystems/abi.h"
 #include "colorfilter.h"
 
-// Function
+/**
+ * Apply image functions to image
+ * @param[in] *img The input image to edit
+ * @return The edited output image
+ */
 struct image_t *colorfilter_func(struct image_t *img)
 {
-  // Filter
-//  color_count = image_yuv422_colorfilt_box(img, img,
-//                                       color_lum_min, color_lum_max,
-//                                       color_cb_min, color_cb_max,
-//                                       color_cr_min, color_cr_max, &ctr, &ctl
-//                                      );
-
   image_yuv422_colorfilt_multibox(img, img,
                                   VER_SUBBOXES, HOR_SUBBOXES,
                                   color_count_boxes,
@@ -86,9 +83,10 @@ struct image_t *colorfilter_func(struct image_t *img)
   uint16_t w_subbox = w_box / HOR_SUBBOXES;
   uint16_t h_subbox = h_box / VER_SUBBOXES;
 
-  for (uint8_t i_print = 0; i_print < VER_SUBBOXES; i_print++) {
-    for (uint8_t j_print = 0; j_print < HOR_SUBBOXES; j_print++) {
-
+  for (uint8_t i_print = 0; i_print < VER_SUBBOXES; i_print++)
+  {
+    for (uint8_t j_print = 0; j_print < HOR_SUBBOXES; j_print++)
+    {
       uint16_t x_subbox = origin_box[1] + j_print*w_subbox;
       uint16_t y_subbox = origin_box[0] - i_print*h_subbox;
 
@@ -97,7 +95,8 @@ struct image_t *colorfilter_func(struct image_t *img)
       color_count += color_count_boxes[i_print][j_print];
     }
   }
-  if (COLORFILTER_SEND_OBSTACLE) {
+  if (COLORFILTER_SEND_OBSTACLE)
+  {
     if (color_count > 20)
     {
       AbiSendMsgOBSTACLE_DETECTION(OBS_DETECTION_COLOR_ID, 1.f, 0.f, 0.f);
@@ -107,12 +106,13 @@ struct image_t *colorfilter_func(struct image_t *img)
       AbiSendMsgOBSTACLE_DETECTION(OBS_DETECTION_COLOR_ID, 10.f, 0.f, 0.f);
     }
   }
-
   return img; // Color filter did not make a new image
 }
 
 
-
+/**
+ * Initialize the camera to use the color filter
+ */
 void colorfilter_init(void)
 {
   listener = cv_add_to_device(&COLORFILTER_CAMERA, colorfilter_func, COLORFILTER_FPS);

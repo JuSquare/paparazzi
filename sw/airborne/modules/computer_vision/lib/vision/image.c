@@ -239,12 +239,12 @@ void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *outp
   output->ts = input->ts;
 
   // Go trough all the pixels
-  for (uint16_t y = 0; y < output->h; y++) {
-    for (uint16_t x = 0; x < output->w; x += 2) {
-
+  for (uint16_t y = 0; y < output->h; y++)
+  {
+    for (uint16_t x = 0; x < output->w; x += 2)
+    {
       // Check if the color is inside the specified values and inside box
-      if (
-          (dest[1] >= y_m)
+      if ((dest[1] >= y_m)
           && (dest[1] <= y_M)
           && (dest[0] >= u_m)
           && (dest[0] <= u_M)
@@ -253,9 +253,8 @@ void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *outp
           && (y >= origin_box[1])
           && (y <  origin_box[1]+w_box)
           && (x >= origin_box[0]-h_box)
-          && (x < origin_box[0])
-          ) {
-
+          && (x < origin_box[0]))
+      {
         // UYVY
         dest[0] = 64;         // U
         dest[1] = source[1];  // Y
@@ -264,14 +263,16 @@ void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *outp
 
         // Loop through boxes in search box
         int flag = 0;
-        for (uint8_t i_subbox = 0; i_subbox < n_ver; i_subbox++) {
-          for (uint8_t j_subbox = 0; j_subbox < n_hor; j_subbox++) {
+        for (uint8_t i_subbox = 0; i_subbox < n_ver; i_subbox++)
+        {
+          for (uint8_t j_subbox = 0; j_subbox < n_hor; j_subbox++)
+          {
 
             if ((y >= origin_subbox[1])
                 && (y < origin_subbox[1] + w_subbox)
                 && (x >= origin_subbox[0] - h_subbox)
-                && (x < origin_subbox[0])) {
-
+                && (x < origin_subbox[0]))
+            {
               // Add pixel to box count
               cnts[i_subbox][j_subbox]++;
               // Set flag to break out of double loop

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) M.J.Mollema
+ * Copyright (C) M.J. Mollema
  *
  * This file is part of paparazzi
  *
@@ -17,6 +17,7 @@
  * along with paparazzi; see the file COPYING.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
+
 /**
  * @file "modules/cr7/cr7_avoider.h"
  * @author Michiel Jonathan Mollema

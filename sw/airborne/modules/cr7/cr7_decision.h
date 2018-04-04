@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Michiel Jonathan Mollema
+ * Copyright (C) M.J. Mollema
  *
  * This file is part of paparazzi
  *
@@ -17,6 +17,7 @@
  * along with paparazzi; see the file COPYING.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
+
 /**
  * @file "modules/cr7/cr7_decision.h"
  * @author Michiel Jonathan Mollema
@@ -44,9 +45,7 @@ extern float avgr;
 
 float moveDistanceDecider;
 
-
 void arrshifter(uint16_t ctr, uint16_t ctl, uint8_t i, uint8_t j, uint16_t array[J][I], float *avgl, float *avgr);
-
 
 #endif
 
