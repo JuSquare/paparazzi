@@ -43,14 +43,17 @@ float avgr = 0;
 uint8_t goLeft, goRight, obstacle, fullStop;
 
 // Threshold parameters to base decisions on
-float decisionThreshold = 0.1; //percentage of required difference between left colorcount and right colorcount
-uint16_t countThresholdTop = 60*75*0.05;
-uint16_t countThresholdBotOuter = 60*75*0.1; // 0.2
-uint16_t countThresholdBotInner = 60*75*0.25;
+float decisionThreshold = 0.2; //percentage of required difference between left colorcount and right colorcount
+uint16_t maxCountTop 			= 2*75*75;
+uint16_t countThresholdTop 		= 75*75*0.10;
+uint16_t countThresholdBotOuter = 75*75*0.20; // 0.2
+uint16_t countThresholdBotInner = 75*75*0.60;
 
 uint16_t colorCountTopPrev;
 uint16_t colorCountBotInnerPrev;
 uint16_t colorCountBotOuterPrev;
+
+float moveDistanceDecider;
 
 // Function to decide to go left or right based on color count left and right
 // Another full stop here?
@@ -74,29 +77,30 @@ void LRdecider(int16_t colorLeft, int16_t colorRight)
 		goLeft 		= 0;
 		goRight 	= 0;
 		fullStop 	= 1;
-		printf("ERROR,FULL STOP\n ");
 	}
-	printf("goLeft = %d, goRight = %d, fullStop = %d\n", goLeft, goRight, fullStop);
+//	printf("goLeft = %d, goRight = %d, fullStop = %d\n", goLeft, goRight, fullStop);
+//	printf("Left: %d, Right: %d\n", colorLeft, colorRight)
 }
 
 
 // Main periodic function to decide what to do
 void decide_periodic()
 {
-printf("Threshold top: %d, Threshold bottom inner %d,Threshold bottom outer %d\n", countThresholdTop, countThresholdBotInner, countThresholdBotOuter);
+//printf("Threshold top: %d, Threshold bottom inner %d,Threshold bottom outer %d\n", countThresholdTop, countThresholdBotInner, countThresholdBotOuter);
 //	Get count values for all different boxes and the full field
-	uint16_t greenTopLeft 		= color_count_boxes[0][1];
-	uint16_t greenTopRight 		= color_count_boxes[0][2];
-	uint16_t greenBotInnerLeft 	= color_count_boxes[1][1];
-	uint16_t greenBotInnerRight = color_count_boxes[1][2];
-	uint16_t greenBotOuterLeft 	= color_count_boxes[1][0];
-	uint16_t greenBotOuterRight = color_count_boxes[1][3];
+//	uint16_t greenTopLeft 		= color_count_boxes[0][1];
+//	uint16_t greenTopRight 		= color_count_boxes[0][2];
+//	uint16_t greenBotInnerLeft 	= color_count_boxes[1][1];
+//	uint16_t greenBotInnerRight = color_count_boxes[1][2];
+//	uint16_t greenBotOuterLeft 	= color_count_boxes[1][0];
+//	uint16_t greenBotOuterRight = color_count_boxes[1][3];
 	uint16_t greenLeft 			= color_count_boxes[0][0] + color_count_boxes[0][1] + color_count_boxes[1][0] + color_count_boxes[1][1];
 	uint16_t greenRight 		= color_count_boxes[0][2] + color_count_boxes[0][3] + color_count_boxes[1][2] + color_count_boxes[1][3];
 
 	uint16_t colorCountTop 		= color_count_boxes[0][1] + color_count_boxes[0][2];
 	uint16_t colorCountBotInner = color_count_boxes[1][1] + color_count_boxes[1][2];
 	uint16_t colorCountBotOuter = color_count_boxes[1][0] + color_count_boxes[1][3];
+	uint16_t colorCountTopTotal	= color_count_boxes[0][0] + color_count_boxes[0][1] + color_count_boxes[0][2] + color_count_boxes[0][3];
 
 	if(colorCountTop == 0)
 	{
@@ -111,24 +115,23 @@ printf("Threshold top: %d, Threshold bottom inner %d,Threshold bottom outer %d\n
 		colorCountBotOuter = colorCountBotOuterPrev;
 	} else{colorCountBotOuterPrev = colorCountBotOuter;}
 
-	printf("top = %.2f, inner bottom = %.2f, outer bottom = %.2f\n", (float)(colorCountTop)/(float)(countThresholdTop),
-																	(float)(colorCountBotInner)/(float)(countThresholdBotInner),
-																	(float)(colorCountBotOuter)/(float)(countThresholdBotOuter));
+//	printf("top = %.2f, inner bottom = %.2f, outer bottom = %.2f\n", (float)(colorCountTop)/(float)(countThresholdTop),
+//																	(float)(colorCountBotInner)/(float)(countThresholdBotInner),
+//																	(float)(colorCountBotOuter)/(float)(countThresholdBotOuter));
 //	printf("count top = %d, inner bottom = %d, outer bottom = %d\n", colorCountTop,
 //																	colorCountBotInner,
 //																	colorCountBotOuter);
 //	printf("\n");
 
-	// Maybe only full stop for bottom inner boxes?
 	// First decider for making a fullStop manoeuvre  if any of the colorcount in the boxes is smaller than the threshold
 //	if((colorCountTop < countThresholdTop && colorCountBotInner < countThresholdBotInner) || (colorCountTop < countThresholdTop && colorCountBotOuter < countThresholdBotOuter))
-	if (colorCountTop < countThresholdTop && colorCountBotOuter < countThresholdBotOuter || colorCountBotInner < countThresholdBotInner)
+	if (colorCountBotInner < countThresholdBotInner)
 	{
 		obstacle 	= 1;
 		goLeft 		= 0;
 		goRight 	= 0;
 		fullStop 	= 1;
-		printf("Color count top & bottom outer < thresholds --> FULL STOP\n");
+//		printf("Color count top & bottom outer < thresholds --> FULL STOP\n");
 	// If no fullStop manoeuvre is required check which side has the most green and go there
 	} else if(abs((int)(avgl - avgr)) > (int)(decisionThreshold*color_count/2.0f))
 	{
@@ -143,14 +146,15 @@ printf("Threshold top: %d, Threshold bottom inner %d,Threshold bottom outer %d\n
 		fullStop 	= 0;
 	}
 	arrshifter(greenRight, greenLeft, I, J, avgarr, &avgl, &avgr );
-	printf("Average left %f, average right %f, absolute Difference: %d\n", avgl, avgr,abs((int)(avgl - avgr)));
-	printf("Left/right difference threshold: %d\n",(int)(decisionThreshold*color_count/2.0f));
+	speedDecider(colorCountTopTotal, maxCountTop);
+//	printf("Average left %f, average right %f, absolute Difference: %d\n", avgl, avgr,abs((int)(avgl - avgr)));
+//	printf("Left/right difference threshold: %d\n",(int)(decisionThreshold*color_count/2.0f));
 }
 
-//void SpeedDecider(uint16_t colorCount, uint16_t maxColorCount)
-//{
-//	moveDistance = colorCount/maxColorCount * 1.0
-//}
+void speedDecider(uint16_t colorCount, uint16_t maxColorCount)
+{
+	moveDistanceDecider = (float)(colorCount)/maxColorCount * 1.5;
+}
 
 //function left right shifter
 

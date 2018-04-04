@@ -40,15 +40,13 @@ void fullStopRotate(void);
 
 void cr7_avoid_periodic()
 {
-//	float moveDistance
-	float moveDistance = 1.1;
+	float moveDistance = fmax(0.5, moveDistanceDecider);
 //	Check if there is an obstacle
 	if(obstacle)
 	{
 //		If obstacle, go left
 		if(goLeft)
 		{
-<<<<<<< Updated upstream
 			if(pflagleft){
 			printf("GOING LEFT\n");
 			pflagleft=0;
@@ -57,32 +55,22 @@ void cr7_avoid_periodic()
 			plflagstop=1;
 
 			}
-=======
-			printf("GOING LEFT\n");
->>>>>>> Stashed changes
 			moveWaypointLeft(WP_GOAL, moveDistance);
 //		Or if obstacle, go right (depends on vision part)
 		} else if(goRight)
 		{
-<<<<<<< Updated upstream
 			if(pflagright){
 						printf("GOING RIGHT\n");
 						pflagleft=1;
 						pflagright=0;
 						pflagstraight=1;
 						plflagstop=1;
-
 						}
-=======
-			printf("GOING RIGHT\n");
->>>>>>> Stashed changes
 			moveWaypointRight(WP_GOAL, moveDistance);
 		} else if(fullStop)
 		{
 			waypoint_set_here_2d(WP_GOAL);
 			fullStopRotate();
-<<<<<<< Updated upstream
-
 			if(plflagstop){
 		printf("FULL STOP \n");
 		pflagleft=1;
@@ -91,9 +79,6 @@ void cr7_avoid_periodic()
 		plflagstop=0;
 
 									}
-=======
-			printf("ERROR, FULL STOP\n");
->>>>>>> Stashed changes
 		}
 //	If no obstacle is found, set waypoint GOAL forward
 	} else
@@ -145,7 +130,7 @@ void fullStopRotate()
 
 static uint8_t calculateLeft(struct EnuCoor_i *new_coor, float distanceMeters)
 {
-	float headingChange 			= 0.05;
+	float headingChange 			= 0.08;
 	struct EnuCoor_i *pos 			= stateGetPositionEnu_i();
 	struct Int32Eulers *eulerAngles = stateGetNedToBodyEulers_i();
 
@@ -162,7 +147,7 @@ static uint8_t calculateLeft(struct EnuCoor_i *new_coor, float distanceMeters)
 
 static uint8_t calculateRight(struct EnuCoor_i *new_coor, float distanceMeters)
 {
-	float headingChange 			= 0.05;
+	float headingChange 			= 0.08;
 	struct EnuCoor_i *pos 			= stateGetPositionEnu_i();
 	struct Int32Eulers *eulerAngles = stateGetNedToBodyEulers_i();
 
@@ -182,7 +167,6 @@ static uint8_t calculateRight(struct EnuCoor_i *new_coor, float distanceMeters)
 uint8_t moveWaypoint(uint8_t waypoint, struct EnuCoor_i *new_coor)
 {
   waypoint_set_xy_i(waypoint, new_coor->x, new_coor->y);
-//  printf("Moving waypoint\n");
   return false;
 }
 
