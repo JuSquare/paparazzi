@@ -31,6 +31,7 @@
 #include <sys/time.h>
 #include <state.h>
 
+// Number of subboxes for image_yuv422_colorfilt_multibox
 #define VER_SUBBOXES 2
 #define HOR_SUBBOXES 4
 
@@ -95,16 +96,9 @@ void image_switch(struct image_t *a, struct image_t *b);
 void image_to_grayscale(struct image_t *input, struct image_t *output);
 uint16_t image_yuv422_colorfilt(struct image_t *input, struct image_t *output, uint8_t y_m, uint8_t y_M, uint8_t u_m,
                                 uint8_t u_M, uint8_t v_m, uint8_t v_M);
-//uint16_t image_yuv422_section(struct image_t *input, struct image_t *output, uint8_t y_m, uint8_t y_M, uint8_t u_m,
-  //                              uint8_t u_M, uint8_t v_m, uint8_t v_M, int *count_p_r);
-//uint16_t image_yuv422_colorfilt_box(struct image_t *input, struct image_t *output, uint8_t y_m, uint8_t y_M, uint8_t u_m,
-//                                uint8_t u_M, uint8_t v_m, uint8_t v_M, uint16_t *count_p_r, uint16_t *count_p_l);
 void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *output, uint8_t n_ver, uint8_t n_hor,
-                                          uint16_t cnts[VER_SUBBOXES][HOR_SUBBOXES],
-                                          uint16_t origin_box[2], uint16_t h_box, uint16_t w_box, uint8_t y_m, uint8_t y_M,
-                                          uint8_t u_m, uint8_t u_M, uint8_t v_m, uint8_t v_M);
-//uint16_t image_yuv422_section(struct image_t *input, struct image_t *output, uint8_t y_m, uint8_t y_M, uint8_t u_m,
-      //                          uint8_t u_M, uint8_t v_m, uint8_t v_M);
+                                     uint16_t cnts[VER_SUBBOXES][HOR_SUBBOXES], uint16_t origin_box[2], uint16_t h_box, uint16_t w_box,
+                                     uint8_t y_m, uint8_t y_M, uint8_t u_m, uint8_t u_M, uint8_t v_m, uint8_t v_M);
 void image_yuv422_downsample(struct image_t *input, struct image_t *output, uint16_t downsample);
 void image_subpixel_window(struct image_t *input, struct image_t *output, struct point_t *center,
                            uint32_t subpixel_factor, uint8_t border_size);

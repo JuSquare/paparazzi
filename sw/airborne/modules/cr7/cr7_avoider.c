@@ -1,5 +1,5 @@
 /*
- * Copyright (C) M.J.Mollema
+ * Copyright (C) M.J. Mollema
  *
  * This file is part of paparazzi
  *
@@ -32,10 +32,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-uint8_t pflagleft =1; //print flags (to avoid high frequency prints), only print each message once until something changes
-uint8_t pflagright=1;
-uint8_t pflagstraight=1;
-uint8_t plflagstop=1;
+// Print flags to avoid high frequency prints
+// Only print if change
+uint8_t pflagleft     = 1;
+uint8_t pflagright    = 1;
+uint8_t pflagstraight = 1;
+uint8_t plflagstop    = 1;
+
 void fullStopRotate(void);
 
 void cr7_avoid_periodic()
