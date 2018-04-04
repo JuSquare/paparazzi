@@ -25,6 +25,9 @@
 
 #ifndef CR7_DECISION_H
 #define CR7_DECISION_H
+
+#define J 2
+#define I 4
 #include <inttypes.h>
 
 extern void decide_periodic(void);
@@ -32,6 +35,16 @@ extern uint8_t obstacle;
 extern uint8_t goLeft;
 extern uint8_t goRight;
 extern uint8_t fullStop;
+
+extern uint16_t ctr;
+extern uint16_t ctl;
+
+extern float avgl;
+extern float avgr;
+
+
+void arrshifter(uint16_t ctr, uint16_t ctl, uint8_t i, uint8_t j, uint16_t array[J][I], float *avgl, float *avgr);
+
 
 #endif
 

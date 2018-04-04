@@ -51,9 +51,9 @@ uint8_t color_cr_min  = 63;//180;
 uint8_t color_cr_max  = 105;//255;
 
 // Search box sizes
-uint16_t origin_box[2] = {100, 125};
-uint16_t h_box = 100;
-uint16_t w_box = 294;
+uint16_t origin_box[2] = {80, 110};
+uint16_t h_box = 80;
+uint16_t w_box = 300;
 
 
 // Result
@@ -64,56 +64,56 @@ uint16_t color_count_boxes[VER_SUBBOXES][HOR_SUBBOXES] = {0};
 #include "colorfilter.h"
 
 
-
+//
 //int i= 10;
 //int j = 2;
-uint16_t ctr=0;
-uint16_t *count_p_r=&ctr;
-uint16_t ctl=0;
-uint16_t *count_p_l=&ctl;
-float avgl = 0;
-float avgr = 0;
+//uint16_t ctr=0;
+//uint16_t *count_p_r=&ctr;
+//uint16_t ctl=0;
+//uint16_t *count_p_l=&ctl;
+//float avgl = 0;
+//float avgr = 0;
 
 
 
 //function left right shifter
-
-void arrshifter(uint16_t ctr, uint16_t ctl, uint8_t i, uint8_t j, uint16_t array[j][i],float *avgl, float *avgr)//i and j are horizontal and vertical array size subsequently
-{	float avg_left=0;
-	float avg_right=0;
-	int u;
-	int v;
-	  for (v=0; v<(j); v++){
-	  		for (u=0; u<(i-1); u++){
-	  			array[v][u]=array[v][u+1]; //all values in the array shift to the left
-
-	  	}
-	  		array[0][i-1]=ctl; // the last column is replaced by the latest count values
-	  		array[1][i-1]=ctr; // first row is left second row is right
-	  }
-
-
-	  for (u=0; u<(i); u++){
-		  avg_left=avg_left+array[0][u];
-		  avg_right=avg_right+array[1][u];
-
-	  }
-	  *avgl=avg_left/10;
-	  *avgr=avg_right/10;
-	  printf("Average left %f, Average right %f ", *avgl, *avgr);
-
-
-	 /* for(int l = 0; l < i; l++) {
-	  		          printf("%d ", array[0][l]);
-	  		      }
-	  		      printf("\n");
-	  for(int l = 0; l < i; l++) {
-						  printf("%d ", array[1][l]);
-					  }
-					  printf("\n");*/
-
-  return;
-}
+//
+//void arrshifter(uint16_t ctr, uint16_t ctl, uint8_t i, uint8_t j, uint16_t array[j][i],float *avgl, float *avgr)//i and j are horizontal and vertical array size subsequently
+//{	float avg_left=0;
+//	float avg_right=0;
+//	int u;
+//	int v;
+//	  for (v=0; v<(j); v++){
+//	  		for (u=0; u<(i-1); u++){
+//	  			array[v][u]=array[v][u+1]; //all values in the array shift to the left
+//
+//	  	}
+//	  		array[0][i-1]=ctl; // the last column is replaced by the latest count values
+//	  		array[1][i-1]=ctr; // first row is left second row is right
+//	  }
+//
+//
+//	  for (u=0; u<(i); u++){
+//		  avg_left=avg_left+array[0][u];
+//		  avg_right=avg_right+array[1][u];
+//
+//	  }
+//	  *avgl=avg_left/10;
+//	  *avgr=avg_right/10;
+////	  printf("Average left %f, Average right %f ", *avgl, *avgr);
+//
+//
+//	 /* for(int l = 0; l < i; l++) {
+//	  		          printf("%d ", array[0][l]);
+//	  		      }
+//	  		      printf("\n");
+//	  for(int l = 0; l < i; l++) {
+//						  printf("%d ", array[1][l]);
+//					  }
+//					  printf("\n");*/
+//
+//  return;
+//}
 
 // Function
 struct image_t *colorfilter_func(struct image_t *img)
@@ -143,12 +143,12 @@ struct image_t *colorfilter_func(struct image_t *img)
       uint16_t x_subbox = origin_box[1] + j_print*w_subbox;
       uint16_t y_subbox = origin_box[0] - i_print*h_subbox;
 
-      printf("Box %d: %d\t", i_print*HOR_SUBBOXES + j_print, color_count_boxes[i_print][j_print]);
+//      printf("Box %d: %d\t", i_print*HOR_SUBBOXES + j_print, color_count_boxes[i_print][j_print]);
       image_draw_rectangle(img, y_subbox-h_subbox, y_subbox, x_subbox, x_subbox+w_subbox, color);
       color_count += color_count_boxes[i_print][j_print];
     }
   }
-  printf("\n");
+//  printf("\n");
   //printf("Count right: %d", *count_p_r);
 
   if (COLORFILTER_SEND_OBSTACLE) {

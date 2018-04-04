@@ -68,9 +68,6 @@
       <define name="VIEWVIDEO_DOWNSIZE_FACTOR" value="1" />
       
       <define name="VIEWVIDEO_SHOT_PATH" value="/data/ftp/internal_000" />
-      
-      <!-- <define name="VIEWVIDEO_WRITE_VIDEO" value="FALSE" />
-      <define name="VIEWVIDEO_VIDEO_FILE" value="orangeAvoider" /> -->
     </module>
   </firmware>
 
@@ -105,13 +102,13 @@
   </command_laws>
 
   <!-- Cyberzoo values -->
-<!--   <section name="COLORFILTER" prefix="CR7_VISION_">
+ <!--  <section name="COLORFILTER" prefix="CR7_VISION_">
     <define name="LUM_MIN" value="5"/>
     <define name="LUM_MAX" value="166"/>
     <define name="CB_MIN" value="25"/>
     <define name="CB_MAX" value="130"/>
     <define name="CR_MIN" value="33"/>
-    <define name="CR_MAX" value="132"/>
+    <define name="CR_MAX" value="132"/> 
   </section> -->
   <!-- Simulation values -->
   <section name="COLORFILTER" prefix="CR7_VISION_">

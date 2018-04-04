@@ -29,8 +29,8 @@
 #include <stdint.h>
 #include "modules/computer_vision/cv.h"
 
-#define J 2
-#define I 10
+//#define J 2
+//#define I 10
 
 #ifndef VER_SUBBOXES
 #define VER_SUBBOXES 2
@@ -55,15 +55,15 @@ extern uint8_t color_cr_max;
 
 extern uint16_t color_count;
 extern uint16_t color_count_boxes[VER_SUBBOXES][HOR_SUBBOXES];
-
-extern uint16_t ctr;
-extern uint16_t ctl;
-
-extern float avgl;
-extern float avgr;
-
-
-void arrshifter(uint16_t ctr, uint16_t ctl, uint8_t i, uint8_t j, uint16_t array[J][I], float *avgl, float *avgr);
+//
+//extern uint16_t ctr;
+//extern uint16_t ctl;
+//
+//extern float avgl;
+//extern float avgr;
+//
+//
+//void arrshifter(uint16_t ctr, uint16_t ctl, uint8_t i, uint8_t j, uint16_t array[J][I], float *avgl, float *avgr);
 
 extern struct video_listener *listener;
 

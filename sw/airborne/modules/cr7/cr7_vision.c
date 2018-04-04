@@ -107,35 +107,3 @@ void vision_periodic()
   VERBOSE_PRINT("Color_count: %d  threshold: %d safe: %d count right: %d count left: %d \n", color_count, tresholdColorCount, safeToGoForwards, ctr, ctl);
   return;
 }
-
-
-//// Function
-//struct image_t *colorfilter_func(struct image_t *img);
-//struct image_t *colorfilter_func(struct image_t *img)
-//{
-//  // Filter
-//  color_count = image_yuv422_colorfilt_box(img, img,
-//                                       color_lum_min, color_lum_max,
-//                                       color_cb_min, color_cb_max,
-//                                       color_cr_min, color_cr_max, &ctr, &ctl
-//                                      );
-//  //printf("Count right: %d", *count_p_r);
-//
-//  if (COLORFILTER_SEND_OBSTACLE) {
-//    if (color_count > 20)
-//    {
-//      AbiSendMsgOBSTACLE_DETECTION(OBS_DETECTION_COLOR_ID, 1.f, 0.f, 0.f);
-//    }
-//    else
-//    {
-//      AbiSendMsgOBSTACLE_DETECTION(OBS_DETECTION_COLOR_ID, 10.f, 0.f, 0.f);
-//    }
-//  }
-//
-//  return img; // Colorfilter did not make a new image
-//}
-
-//void colorfilter_init(void)
-//{
-//  listener = cv_add_to_device(&COLORFILTER_CAMERA, colorfilter_func, COLORFILTER_FPS);
-//}
