@@ -61,17 +61,20 @@ void LRdecider(int16_t colorLeft, int16_t colorRight)
 		goLeft 		= 1;
 		goRight 	= 0;
 		fullStop 	= 0;
+//		printf("GOING LEFT\n");
 	} else if(colorLeft < colorRight)
 	{
 		goLeft 		= 0;
 		goRight 	= 1;
 		fullStop 	= 0;
+//		printf("GOING RIGHT\n");
 	}
 	else
 	{
 		goLeft 		= 0;
 		goRight 	= 0;
 		fullStop 	= 1;
+		printf("ERROR,FULL STOP\n ");
 	}
 //	printf("goLeft = %d, goRight = %d, fullStop = %d\n", goLeft, goRight, fullStop);
 }
@@ -80,7 +83,7 @@ void LRdecider(int16_t colorLeft, int16_t colorRight)
 // Main periodic function to decide what to do
 void decide_periodic()
 {
-//	printf("thresholds: %d, %d, %d\n", countThresholdTop, countThresholdBotInner, countThresholdBotOuter);
+printf("Threshold top: %d, Threshold bottom inner %d,Threshold bottom outer %d\n", countThresholdTop, countThresholdBotInner, countThresholdBotOuter);
 //	Get count values for all different boxes and the full field
 	uint16_t greenTopLeft 		= color_count_boxes[0][1];
 	uint16_t greenTopRight 		= color_count_boxes[0][2];
@@ -125,7 +128,7 @@ void decide_periodic()
 		goLeft 		= 0;
 		goRight 	= 0;
 		fullStop 	= 1;
-		printf("Full stop bitches\n");
+		printf("Color count top & bottom outer < thresholds --> FULL STOP\n");
 	// If no fullStop manoeuvre is required check which side has the most green and go there
 	} else if(abs((int)(avgl - avgr)) > (int)(decisionThreshold*color_count/2.0f))
 	{
@@ -140,7 +143,8 @@ void decide_periodic()
 		fullStop 	= 0;
 	}
 	arrshifter(greenRight, greenLeft, I, J, avgarr, &avgl, &avgr );
-	//printf("Average left %f, average right %f", avgl, avgr);
+	printf("Average left %f, average right %f, absolute Difference: %d\n", avgl, avgr,abs((int)(avgl - avgr)));
+	printf("Left/right difference threshold: %d\n",(int)(decisionThreshold*color_count/2.0f));
 }
 
 

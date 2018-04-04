@@ -32,6 +32,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+uint8_t pflagleft =1; //print flags (to avoid high frequency prints), only print each message once until something changes
+uint8_t pflagright=1;
+uint8_t pflagstraight=1;
+uint8_t plflagstop=1;
 void fullStopRotate(void);
 
 void cr7_avoid_periodic()
@@ -43,23 +47,53 @@ void cr7_avoid_periodic()
 //		If obstacle, go left
 		if(goLeft)
 		{
-//			printf("GOING LEFT\n");
+			if(pflagleft){
+			printf("GOING LEFT\n");
+			pflagleft=0;
+			pflagright=1;
+			pflagstraight=1;
+			plflagstop=1;
+
+			}
 			moveWaypointLeft(WP_GOAL, moveDistance);
 //		Or if obstacle, go right (depends on vision part)
 		} else if(goRight)
 		{
-//			printf("GOING RIGHT\n");
+			if(pflagright){
+						printf("GOING RIGHT\n");
+						pflagleft=1;
+						pflagright=0;
+						pflagstraight=1;
+						plflagstop=1;
+
+						}
 			moveWaypointRight(WP_GOAL, moveDistance);
 		} else if(fullStop)
 		{
 			waypoint_set_here_2d(WP_GOAL);
 			fullStopRotate();
-//			printf("ERROR, FULL STOP\n");
+
+			if(plflagstop){
+		printf("FULL STOP \n");
+		pflagleft=1;
+		pflagright=1;
+		pflagstraight=1;
+		plflagstop=0;
+
+									}
 		}
 //	If no obstacle is found, set waypoint GOAL forward
 	} else
 	{
-//		printf("RECHT-ZO-DIE-GAAT\n");
+		if(pflagstraight){
+					printf("GOING STRAIGHT\n");
+					pflagleft=1;
+					pflagright=1;
+					pflagstraight=0;
+					plflagstop=1;
+
+					}
+
 		moveWaypointForward(WP_GOAL, moveDistance);
 		nav_set_heading_towards_waypoint(WP_GOAL);
 	}
@@ -135,6 +169,7 @@ static uint8_t calculateRight(struct EnuCoor_i *new_coor, float distanceMeters)
 uint8_t moveWaypoint(uint8_t waypoint, struct EnuCoor_i *new_coor)
 {
   waypoint_set_xy_i(waypoint, new_coor->x, new_coor->y);
+//  printf("Moving waypoint\n");
   return false;
 }
 
