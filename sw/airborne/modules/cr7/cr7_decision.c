@@ -59,7 +59,7 @@ float moveDistanceDecider;
 // Another full stop here?
 void LRdecider(int16_t colorLeft, int16_t colorRight)
 {
-	if(colorLeft >= colorRight)
+	if(colorLeft > colorRight)
 	{
 		goLeft 		= 1;
 		goRight 	= 0;
@@ -72,11 +72,12 @@ void LRdecider(int16_t colorLeft, int16_t colorRight)
 		fullStop 	= 0;
 //		printf("GOING RIGHT\n");
 	}
-	else
+	else // Do nothing
 	{
 		goLeft 		= 0;
 		goRight 	= 0;
-		fullStop 	= 1;
+		fullStop 	= 0;
+		obstacle  = 0;
 	}
 //	printf("goLeft = %d, goRight = %d, fullStop = %d\n", goLeft, goRight, fullStop);
 //	printf("Left: %d, Right: %d\n", colorLeft, colorRight)
