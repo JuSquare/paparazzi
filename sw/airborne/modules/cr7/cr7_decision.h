@@ -43,7 +43,7 @@ extern float moveDistanceDecider;
 
 void LRdecider(int16_t colorLeft, int16_t colorRight);
 void speedDecider(float *moveDist, uint16_t colorCount, uint16_t maxColorCount);
-void arrShifter(uint16_t countL, uint16_t countR, uint8_t i, uint8_t j, uint16_t arr[j][i], float *avgL, float *avgR);
+void arrShifter(uint16_t countL, uint16_t countR, uint8_t i, uint8_t j, uint16_t arr[J][I], float *avgL, float *avgR);
 
 #endif
 
