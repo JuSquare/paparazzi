@@ -1,35 +1,34 @@
 /*
- * Copyright (C) Roland Meertens
+ * Copyright (C) M.J. Mollema
  *
  * This file is part of paparazzi
  *
+ * paparazzi is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option)
+ * any later version.
+ *
+ * paparazzi is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with paparazzi; see the file COPYING.  If not, see
+ * <http://www.gnu.org/licenses/>.
  */
+
 /**
- * @file "modules/orange_avoider/orange_avoider.c"
- * @author Roland Meertens
- * Example on how to use the colours detected to avoid orange pole in the cyberzoo
+ * @file "modules/cr7/cr7_vision.h"
+ * @author Michiel Jonathan Mollema
+ * Vision module containing color filters and image functions
  */
 
 #include "modules/cr7/cr7_vision.h"
 #include "modules/computer_vision/colorfilter.h"
 #include "generated/flight_plan.h"
 #include "generated/airframe.h"
-#include "state.h"
-#include <time.h>
-#include <math.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include "subsystems/abi.h"
-
-
-#define CR7_VISION_VERBOSE FALSE
-
-#define PRINT(string,...) fprintf(stderr, "[orange_avoider->%s()] " string,__FUNCTION__ , ##__VA_ARGS__)
-#if CR7_VISION_VERBOSE
-#define VERBOSE_PRINT PRINT
-#else
-#define VERBOSE_PRINT(...)
-#endif
 
 #ifndef CR7_VISION_LUM_MIN
 #define CR7_VISION_LUM_MIN 71
@@ -56,54 +55,24 @@
 #endif
 
 #ifndef COLORFILTER_FPS
-#define COLORFILTER_FPS 0       ///< Default FPS (zero means run at camera fps)
+#define COLORFILTER_FPS 0 // Default FPS (zero means run at camera fps)
 #endif
-PRINT_CONFIG_VAR(COLORFILTER_FPS)
 
-#ifndef COLORFILTER_SEND_OBSTACLE
-#define COLORFILTER_SEND_OBSTACLE FALSE    ///< Default sonar/agl to use in opticflow visual_estimator
-#endif
-PRINT_CONFIG_VAR(COLORFILTER_SEND_OBSTACLE)
-
-uint8_t safeToGoForwards        = false;
-int tresholdColorCount          = 0.1 * 41280; // 520 x 240 = 124.800 total pixels
-//float incrementForAvoidance;
-//uint16_t trajectoryConfidence   = 1;
-//float maxDistance               = 2.25;
-
-// Result
-//int color_count = 0;
-//uint16_t ctr=0;
-//uint16_t *count_p_r=&ctr;
-//uint16_t ctl=0;
-//uint16_t *count_p_l=&ctl;
 /*
  * Initialisation function, setting the colour filter, random seed and incrementForAvoidance
  */
 void vision_init()
 {
-  // Initialise the variables of the colorfilter to accept green
+  // Initialize the variables of the color filter to accept green
   color_lum_min = CR7_VISION_LUM_MIN;
   color_lum_max = CR7_VISION_LUM_MAX;
   color_cb_min  = CR7_VISION_CB_MIN;
   color_cb_max  = CR7_VISION_CB_MAX;
   color_cr_min  = CR7_VISION_CR_MIN;
   color_cr_max  = CR7_VISION_CR_MAX;
-  // Initialise random values
-//  srand(time(NULL));
-//  chooseRandomIncrementAvoidance();
-
-//  Add colorfilter to camera
-//  listener = cv_add_to_device(&COLORFILTER_CAMERA, colorfilter_func, COLORFILTER_FPS);
 }
 
 /*
- * Function that checks it is safe to move forwards, and then moves a waypoint forward or changes the heading
+ * Periodic function, serves no purpose
  */
-void vision_periodic()
-{
-  // Check the amount of orange. If this is above a threshold
-  // you want to turn a certain amount of degrees
-  VERBOSE_PRINT("Color_count: %d  threshold: %d safe: %d count right: %d count left: %d \n", color_count, tresholdColorCount, safeToGoForwards, ctr, ctl);
-  return;
-}
+void vision_periodic() {}

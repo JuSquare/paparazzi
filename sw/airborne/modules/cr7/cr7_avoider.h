@@ -21,19 +21,26 @@
 /**
  * @file "modules/cr7/cr7_avoider.h"
  * @author Michiel Jonathan Mollema
- * 
+ * Moves waypoints according to decisions taken by cr7_decision
  */
 
 #ifndef CR7_AVOIDER_H
 #define CR7_AVOIDER_H
+
 #include <inttypes.h>
 #include "math/pprz_geodetic_int.h"
 
 extern void cr7_avoid_periodic(void);
+
+float float_rand( float min, float max );
+void fullStopRotate(void);
+
+// Static functions calculateForwards, calculateLeft, calculateRight not declared here
+
+extern uint8_t moveWaypoint(uint8_t waypoint, struct EnuCoor_i *new_coor);
+extern uint8_t moveWaypointForward(uint8_t waypoint, float distanceMeters);
 extern uint8_t moveWaypointLeft(uint8_t waypoint, float distanceMeters);
 extern uint8_t moveWaypointRight(uint8_t waypoint, float distanceMeters);
-extern uint8_t moveWaypointForward(uint8_t waypoint, float distanceMeters);
-extern uint8_t moveWaypoint(uint8_t waypoint, struct EnuCoor_i *new_coor);
 
 #endif
 

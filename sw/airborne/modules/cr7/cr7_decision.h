@@ -21,7 +21,8 @@
 /**
  * @file "modules/cr7/cr7_decision.h"
  * @author Michiel Jonathan Mollema
- * Deciding on going left/right/straight/stop based on the vision module
+ * Decides on moving straight/left/right with variable speed based on the vision module, after which decisions are
+ * executed by cr7_avoider
  */
 
 #ifndef CR7_DECISION_H
@@ -31,21 +32,18 @@
 #define I 4
 #include <inttypes.h>
 
-extern void decide_periodic(void);
+void decide_periodic(void);
+
 extern uint8_t obstacle;
 extern uint8_t goLeft;
 extern uint8_t goRight;
 extern uint8_t fullStop;
 
-extern uint16_t ctr;
-extern uint16_t ctl;
+extern float moveDistanceDecider;
 
-extern float avgl;
-extern float avgr;
-
-float moveDistanceDecider;
-
-void arrshifter(uint16_t ctr, uint16_t ctl, uint8_t i, uint8_t j, uint16_t array[J][I], float *avgl, float *avgr);
+void LRdecider(int16_t colorLeft, int16_t colorRight);
+void speedDecider(float *moveDist, uint16_t colorCount, uint16_t maxColorCount);
+void arrShifter(uint16_t countL, uint16_t countR, uint8_t i, uint8_t j, uint16_t arr[j][i], float *avgL, float *avgR);
 
 #endif
 

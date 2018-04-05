@@ -21,7 +21,7 @@
 /**
  * @file "modules/cr7/cr7_avoider.c"
  * @author Michiel Jonathan Mollema
- * 
+ * Moves waypoints according to decisions taken by cr7_decision
  */
 
 #include "modules/cr7/cr7_avoider.h"
@@ -40,12 +40,10 @@ uint8_t pflagright = 1;
 uint8_t pflagstraight = 1;
 uint8_t plflagstop = 1;
 
-void fullStopRotate(void);
-
 /**
  * Periodic function that is called at a certain frequency and sets waypoints based on state flags
  */
-void cr7_avoid_periodic()
+void cr7_avoid_periodic(void)
 {
 	float moveDistance = fmax(0.5, moveDistanceDecider);
   // Check if there is an obstacle
@@ -90,7 +88,7 @@ void cr7_avoid_periodic()
 		    plflagstop = 0;
 			}
 		}
-  // If no obstacle is found, set waypoint GOAL forward
+  // If no obstacle is found, set waypoint goal forward
 	}
 	else
 	{
@@ -108,11 +106,34 @@ void cr7_avoid_periodic()
 }
 
 /**
-* Calculates coordinates of a certain distance forward w.r.t. current position and heading
-* @param[in] *new_coor The coordinates to update
-* @param[in] distanceMeters The distance to set the coordinates forward
-* @return false
-*/
+ * Calculate a random float within a certain range
+ * @param[in] min The minimum of the range
+ * @param[in] max The maximum of the range
+ * @return Random float
+ */
+float float_rand( float min, float max )
+{
+	float scale = rand() / (float) RAND_MAX; /* [0, 1.0] */
+	return min + scale * ( max - min );      /* [min, max] */
+}
+
+/**
+ * Does a full stop and places the waypoint a certain (random) amount to the left
+ */
+void fullStopRotate(void)
+{
+	float headingChange = float_rand(0.05, 0.2); // [0.5 1.0]
+	struct Int32Eulers *eulerAngles = stateGetNedToBodyEulers_i();
+
+	nav_set_heading_rad(ANGLE_FLOAT_OF_BFP(eulerAngles->psi) - headingChange);
+}
+
+/**
+ * Calculates coordinates of a certain distance forward w.r.t. current position and heading
+ * @param[in] *new_coor The coordinates to update
+ * @param[in] distanceMeters The distance to set the coordinates forward
+ * @return false
+ */
 static uint8_t calculateForwards(struct EnuCoor_i *new_coor, float distanceMeters)
 {
   struct EnuCoor_i *pos = stateGetPositionEnu_i(); // Get your current position
@@ -128,34 +149,11 @@ static uint8_t calculateForwards(struct EnuCoor_i *new_coor, float distanceMeter
 }
 
 /**
-* Calculate a random float within a certain range
-* @param[in] min The minimum of the range
-* @param[in] max The maximum of the range
-* @return Random float
-*/
-float float_rand( float min, float max )
-{
-    float scale = rand() / (float) RAND_MAX; /* [0, 1.0] */
-    return min + scale * ( max - min );      /* [min, max] */
-}
-
-/**
-* Does a full stop and places the waypoint a certain (random) amount to the left
-*/
-void fullStopRotate()
-{
-	float headingChange = float_rand(0.05, 0.2); // [0.5 1.0]
-	struct Int32Eulers *eulerAngles = stateGetNedToBodyEulers_i();
-
-	nav_set_heading_rad(ANGLE_FLOAT_OF_BFP(eulerAngles->psi) - headingChange);
-}
-
-/**
-* Calculates coordinates of a certain distance forward w.r.t. current position and some incremented heading
-* @param[in] *new_coor The coordinates to update
-* @param[in] distanceMeters The distance to set the coordinates forward
-* @return false
-*/
+ * Calculates coordinates of a certain distance forward w.r.t. current position and some incremented heading
+ * @param[in] *new_coor The coordinates to update
+ * @param[in] distanceMeters The distance to set the coordinates forward
+ * @return false
+ */
 static uint8_t calculateLeft(struct EnuCoor_i *new_coor, float distanceMeters)
 {
 	float headingChange = 0.08;
@@ -175,11 +173,11 @@ static uint8_t calculateLeft(struct EnuCoor_i *new_coor, float distanceMeters)
 }
 
 /**
-* Calculates coordinates of a certain distance forward w.r.t. current position and some incremented heading
-* @param[in] *new_coor The coordinates to update
-* @param[in] distanceMeters The distance to set the coordinates forward
-* @return false
-*/
+ * Calculates coordinates of a certain distance forward w.r.t. current position and some incremented heading
+ * @param[in] *new_coor The coordinates to update
+ * @param[in] distanceMeters The distance to set the coordinates forward
+ * @return false
+ */
 static uint8_t calculateRight(struct EnuCoor_i *new_coor, float distanceMeters)
 {
 	float headingChange 			= 0.08;
@@ -198,11 +196,11 @@ static uint8_t calculateRight(struct EnuCoor_i *new_coor, float distanceMeters)
 }
 
 /**
-* Sets waypoint to the new coordinates
-* @param[in] waypoint The waypoint to update
-* @param[in] *new_coor The coordinates to assign
-* @return false
-*/
+ * Sets waypoint to the new coordinates
+ * @param[in] waypoint The waypoint to update
+ * @param[in] *new_coor The coordinates to assign
+ * @return false
+ */
 uint8_t moveWaypoint(uint8_t waypoint, struct EnuCoor_i *new_coor)
 {
   waypoint_set_xy_i(waypoint, new_coor->x, new_coor->y);
@@ -211,11 +209,11 @@ uint8_t moveWaypoint(uint8_t waypoint, struct EnuCoor_i *new_coor)
 }
 
 /**
-* Sets waypoint to the new coordinates forward
-* @param[in] waypoint The waypoint to update
-* @param[in] distanceMeters The distance to set the coordinates forward
-* @return false
-*/
+ * Sets waypoint to the new coordinates forward
+ * @param[in] waypoint The waypoint to update
+ * @param[in] distanceMeters The distance to set the coordinates forward
+ * @return false
+ */
 uint8_t moveWaypointForward(uint8_t waypoint, float distanceMeters)
 {
   struct EnuCoor_i new_coor;
@@ -226,11 +224,11 @@ uint8_t moveWaypointForward(uint8_t waypoint, float distanceMeters)
 }
 
 /**
-* Sets waypoint to the new coordinates forward and to the left
-* @param[in] waypoint The waypoint to update
-* @param[in] distanceMeters The distance to set the coordinates forward
-* @return false
-*/
+ * Sets waypoint to the new coordinates forward and to the left
+ * @param[in] waypoint The waypoint to update
+ * @param[in] distanceMeters The distance to set the coordinates forward
+ * @return false
+ */
 uint8_t moveWaypointLeft(uint8_t waypoint, float distanceMeters)
 {
 	struct EnuCoor_i new_coor;
@@ -241,11 +239,11 @@ uint8_t moveWaypointLeft(uint8_t waypoint, float distanceMeters)
 }
 
 /**
-* Sets waypoint to the new coordinates forward and to the right
-* @param[in] waypoint The waypoint to update
-* @param[in] distanceMeters The distance to set the coordinates forward
-* @return false
-*/
+ * Sets waypoint to the new coordinates forward and to the right
+ * @param[in] waypoint The waypoint to update
+ * @param[in] distanceMeters The distance to set the coordinates forward
+ * @return false
+ */
 uint8_t moveWaypointRight(uint8_t waypoint, float distanceMeters)
 {
 	struct EnuCoor_i new_coor;
