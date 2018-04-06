@@ -90,8 +90,8 @@ void decide_periodic(void)
 		colorCountBotOuter = colorCountBotOuterPrev;
 	} else {colorCountBotOuterPrev = colorCountBotOuter;}
 
-	printf("avgLeft: %d, avgRight: %d, threshold: %.2f", avgLeft, avgRight, decisionThreshold * colorCount / 2.0f);
-	
+	printf("avgLeft: %d, avgRight: %d, colorCount: %d, threshold: %d\n", (int)avgLeft, (int)avgRight, colorCount, (int)(decisionThreshold * colorCount / 2.0f));
+
 	// First decider for making a full stop if any the color count in the inner bottom subboxes < threshold
 	if (colorCountBotInner < countThresholdBotInner)
 	{
@@ -132,14 +132,14 @@ void LRdecider(int16_t colorLeft, int16_t colorRight)
 		goLeft = 1;
 		goRight = 0;
 		fullStop = 0;
-		printf("Going left bois");
+		printf("Going left bois\n");
 	}
 	else if(colorLeft < colorRight)
 	{
 		goLeft = 0;
 		goRight = 1;
 		fullStop = 0;
-		printf("Going right bois");
+		printf("Going right bois\n");
 	}
 	else // Do nothing, unset obstacle flag
 	{
