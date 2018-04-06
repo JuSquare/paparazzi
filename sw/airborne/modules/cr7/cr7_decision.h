@@ -35,10 +35,7 @@
 
 void decide_periodic(void);
 
-extern uint8_t obstacle;
-extern uint8_t goLeft;
-extern uint8_t goRight;
-extern uint8_t fullStop;
+extern uint8_t goLeft, goRight, obstacle, fullStop;
 
 extern float moveDistanceDecider;
 

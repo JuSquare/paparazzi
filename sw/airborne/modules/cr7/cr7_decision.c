@@ -48,7 +48,7 @@ float decisionThreshold = 0.2;
 uint16_t maxCountTop = 2*75*75; // 2 subboxes top inner maximum
 uint16_t countThresholdTop = 75*75*0.10f; // 2 subboxes top inner, not used
 uint16_t countThresholdBotOuter = 75*75*0.20f; // 2 subboxes bottom outer, not used
-uint16_t countThresholdBotInner = 75*75*0.60f; // 2 subboxes bottom inner
+uint16_t countThresholdBotInner = 75*75*0.70f; // 2 subboxes bottom inner, changed from 0.60 -> 0.70
 
 // To store previous correct (!= 0) values
 uint16_t colorCountTopPrev;
@@ -90,6 +90,8 @@ void decide_periodic(void)
 		colorCountBotOuter = colorCountBotOuterPrev;
 	} else {colorCountBotOuterPrev = colorCountBotOuter;}
 
+	printf("avgLeft: %d, avgRight: %d, threshold: %.2f", avgLeft, avgRight, decisionThreshold * colorCount / 2.0f);
+	
 	// First decider for making a full stop if any the color count in the inner bottom subboxes < threshold
 	if (colorCountBotInner < countThresholdBotInner)
 	{
@@ -130,12 +132,14 @@ void LRdecider(int16_t colorLeft, int16_t colorRight)
 		goLeft = 1;
 		goRight = 0;
 		fullStop = 0;
+		printf("Going left bois");
 	}
 	else if(colorLeft < colorRight)
 	{
 		goLeft = 0;
 		goRight = 1;
 		fullStop = 0;
+		printf("Going right bois");
 	}
 	else // Do nothing, unset obstacle flag
 	{
@@ -154,7 +158,7 @@ void LRdecider(int16_t colorLeft, int16_t colorRight)
  */
 void speedDecider(float *moveDist, uint16_t colorCountTop, uint16_t maxColorCount)
 {
-	*moveDist = (float)(colorCountTop) / maxColorCount * 1.5f;
+	*moveDist = (float)(colorCountTop) / maxColorCount * 3.0f;
 }
 
 /**
