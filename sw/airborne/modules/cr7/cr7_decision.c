@@ -26,7 +26,7 @@
  */
 
 #include "modules/cr7/cr7_decision.h"
-#include "modules/computer_vision/colorfilter.h"
+#include "modules/cr7/cr7_vision.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -60,43 +60,35 @@ uint16_t colorCountBotOuterPrev;
  */
 void decide_periodic(void)
 {
-  // Get count values for all different boxes and the full field
-	uint16_t greenLeft = color_count_boxes[0][0] + color_count_boxes[0][1] + color_count_boxes[1][0] + color_count_boxes[1][1];
-	uint16_t greenRight = color_count_boxes[0][2] + color_count_boxes[0][3] + color_count_boxes[1][2] + color_count_boxes[1][3];
-
-	uint16_t colorCountTop = color_count_boxes[0][1] + color_count_boxes[0][2];
-	uint16_t colorCountBotInner = color_count_boxes[1][1] + color_count_boxes[1][2];
-	uint16_t colorCountBotOuter = color_count_boxes[1][0] + color_count_boxes[1][3];
-	uint16_t colorCountTopTotal	= color_count_boxes[0][0] + color_count_boxes[0][1] + color_count_boxes[0][2] + color_count_boxes[0][3];
+  // Get count values for different combinations of subboxes
+  // Left half and right half
+	uint16_t greenLeft = colorCountBoxes[0][0] + colorCountBoxes[0][1] + colorCountBoxes[1][0] + colorCountBoxes[1][1];
+	uint16_t greenRight = colorCountBoxes[0][2] + colorCountBoxes[0][3] + colorCountBoxes[1][2] + colorCountBoxes[1][3];
+  // Top 2 inner subboxes
+	uint16_t colorCountTop = colorCountBoxes[0][1] + colorCountBoxes[0][2];
+  // All top subboxes
+  uint16_t colorCountTopTotal	= colorCountBoxes[0][0] + colorCountBoxes[0][1] + colorCountBoxes[0][2] + colorCountBoxes[0][3];
+	// Bottom 2 inner subboxes
+	uint16_t colorCountBotInner = colorCountBoxes[1][1] + colorCountBoxes[1][2];
+	// Bottom 2 outer subboxes
+	uint16_t colorCountBotOuter = colorCountBoxes[1][0] + colorCountBoxes[1][3];
 
 	// Checks for 0 counts in certain frames
   // If 0, set to last 'correct' value
 	if(colorCountTop == 0)
 	{
 		colorCountTop = colorCountTopPrev;
-	}
-	else
-	{
-	  colorCountTopPrev = colorCountTop;
-	}
+	} else {colorCountTopPrev = colorCountTop;}
 
 	if(colorCountBotInner == 0)
 	{
 		colorCountBotInner = colorCountBotInnerPrev;
-	}
-	else
-	{
-	  colorCountBotInnerPrev = colorCountBotInner;
-	}
+	} else {colorCountBotInnerPrev = colorCountBotInner;}
 
 	if(colorCountBotOuter == 0)
 	{
 		colorCountBotOuter = colorCountBotOuterPrev;
-	}
-	else
-	{
-	  colorCountBotOuterPrev = colorCountBotOuter;
-	}
+	} else {colorCountBotOuterPrev = colorCountBotOuter;}
 
 	// First decider for making a full stop if any the color count in the inner bottom subboxes < threshold
 	if (colorCountBotInner < countThresholdBotInner)
@@ -107,7 +99,7 @@ void decide_periodic(void)
 		fullStop = 1;
 	}
 	// If no full stop is required check which side has the most green and go there
-	else if(abs((int)(avgLeft - avgRight)) > (int)(decisionThreshold * color_count / 2.0f))
+	else if(abs((int)(avgLeft - avgRight)) > (int)(decisionThreshold * colorCount / 2.0f))
 	{
 		obstacle 	= 1;
 		LRdecider((int)(avgLeft), (int)(avgRight));
@@ -123,7 +115,7 @@ void decide_periodic(void)
 	// Do smoothing using the last couple of counts
 	arrShifter(greenRight, greenLeft, I, J, avgArr, &avgLeft, &avgRight);
 	// Adaptive speed based on counts in top subboxes
-	speedDecider(&moveDistanceDecider, colorCountTopTotal, maxCountTop);
+	speedDecider(&moveDistanceDecider, colorCountTop, maxCountTop);
 }
 
 /**
@@ -155,14 +147,14 @@ void LRdecider(int16_t colorLeft, int16_t colorRight)
 }
 
 /**
- * Regulate speed based on color count
+ * Regulate speed based on color count in the inner top subboxes
  * @param[out] *moveDist The distance to move the waypoint forward
  * @param[in] colorCount The pixel count for a certain color
  * @param[in] maxColorCount The maximum possible counts
  */
-void speedDecider(float *moveDist, uint16_t colorCount, uint16_t maxColorCount)
+void speedDecider(float *moveDist, uint16_t colorCountTop, uint16_t maxColorCount)
 {
-	*moveDist = (float)(colorCount) / maxColorCount * 1.5f;
+	*moveDist = (float)(colorCountTop) / maxColorCount * 1.5f;
 }
 
 /**

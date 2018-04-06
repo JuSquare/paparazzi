@@ -30,17 +30,19 @@
 #include <inttypes.h>
 #include "math/pprz_geodetic_int.h"
 
-extern void cr7_avoid_periodic(void);
+void cr7_avoid_periodic(void);
 
 float float_rand( float min, float max );
 void fullStopRotate(void);
 
-// Static functions calculateForwards, calculateLeft, calculateRight not declared here
+uint8_t calculateForwards(struct EnuCoor_i *new_coor, float distanceMeters);
+uint8_t calculateLeft(struct EnuCoor_i *new_coor, float distanceMeters);
+uint8_t calculateRight(struct EnuCoor_i *new_coor, float distanceMeters);
 
-extern uint8_t moveWaypoint(uint8_t waypoint, struct EnuCoor_i *new_coor);
-extern uint8_t moveWaypointForward(uint8_t waypoint, float distanceMeters);
-extern uint8_t moveWaypointLeft(uint8_t waypoint, float distanceMeters);
-extern uint8_t moveWaypointRight(uint8_t waypoint, float distanceMeters);
+uint8_t moveWaypoint(uint8_t waypoint, struct EnuCoor_i *new_coor);
+uint8_t moveWaypointForward(uint8_t waypoint, float distanceMeters);
+uint8_t moveWaypointLeft(uint8_t waypoint, float distanceMeters);
+uint8_t moveWaypointRight(uint8_t waypoint, float distanceMeters);
 
 #endif
 

@@ -28,26 +28,33 @@
 #define CR7_VISION_H
 
 #include <inttypes.h>
+#include "modules/computer_vision/lib/vision/image.h"
 
-//#define CR7_VISION_VERBOSE FALSE
+// Number of subboxes for colorFilterBoxes
+#define VER_SUBBOXES 2
+#define HOR_SUBBOXES 4
 
-//#define PRINT(string,...) fprintf(stderr, "[orange_avoider->%s()] " string,__FUNCTION__ , ##__VA_ARGS__)
-//#if CR7_VISION_VERBOSE
-//#define VERBOSE_PRINT PRINT
-//#else
-//#define VERBOSE_PRINT(...)
-//#endif
+extern uint8_t color_lum_min;
+extern uint8_t color_lum_max;
 
+extern uint8_t color_cb_min;
+extern uint8_t color_cb_max;
 
-//PRINT_CONFIG_VAR(COLORFILTER_FPS)
+extern uint8_t color_cr_min;
+extern uint8_t color_cr_max;
 
-//#ifndef COLORFILTER_SEND_OBSTACLE
-//#define COLORFILTER_SEND_OBSTACLE FALSE    ///< Default sonar/agl to use in opticflow visual_estimator
-//#endif
-//PRINT_CONFIG_VAR(COLORFILTER_SEND_OBSTACLE)
+extern uint16_t colorCount;
+extern uint16_t colorCountBoxes[VER_SUBBOXES][HOR_SUBBOXES];
 
-extern void vision_periodic(void);
-extern void vision_init(void);
+extern struct video_listener *listener;
+
+struct image_t *colorFilter(struct image_t *img);
+void colorFilterBoxes(struct image_t *input, struct image_t *output, uint8_t nVer, uint8_t nHor,
+                      uint16_t cnts[nVer][nHor], uint16_t oBox[2], uint16_t hBox, uint16_t wBox,
+                      uint8_t ym, uint8_t yM, uint8_t um, uint8_t uM, uint8_t vm, uint8_t vM);
+
+void vision_periodic(void);
+void vision_init(void);
 
 #endif
 

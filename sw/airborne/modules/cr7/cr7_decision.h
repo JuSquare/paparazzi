@@ -28,9 +28,10 @@
 #ifndef CR7_DECISION_H
 #define CR7_DECISION_H
 
+#include <inttypes.h>
+
 #define J 2
 #define I 4
-#include <inttypes.h>
 
 void decide_periodic(void);
 
@@ -42,7 +43,7 @@ extern uint8_t fullStop;
 extern float moveDistanceDecider;
 
 void LRdecider(int16_t colorLeft, int16_t colorRight);
-void speedDecider(float *moveDist, uint16_t colorCount, uint16_t maxColorCount);
+void speedDecider(float *moveDist, uint16_t colorCountTop, uint16_t maxColorCount);
 void arrShifter(uint16_t countL, uint16_t countR, uint8_t i, uint8_t j, uint16_t arr[J][I], float *avgL, float *avgR);
 
 #endif

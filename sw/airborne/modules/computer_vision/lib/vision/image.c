@@ -201,106 +201,106 @@ uint16_t image_yuv422_colorfilt(struct image_t *input, struct image_t *output, u
   return cnt;
 }
 
-/**
- * Filter colors in an YUV422 image within a certain box, which is divided into multiple subboxes
- * @param[in] *input The input image to filter
- * @param[out] *output The filtered output image
- * @param[in] n_ver The number of subboxes in the vertical direction
- * @param[in] n_hor The number of subboxes in the horizontal direction
- * @param[out] cnts[n_ver][n_hor] The filtered pixel count per subbox
- * @param[in] origin_box[2] The origin of the box, top left corner
- * @param[in] h_box The height of the box
- * @param[in] w_box The width of the box
- * @param[in] y_m The Y minimum value
- * @param[in] y_M The Y maximum value
- * @param[in] u_m The U minimum value
- * @param[in] u_M The U maximum value
- * @param[in] v_m The V minimum value
- * @param[in] v_M The V maximum value
- */
-void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *output, uint8_t n_ver, uint8_t n_hor,
-                                     uint16_t cnts[n_ver][n_hor], uint16_t origin_box[2], uint16_t h_box, uint16_t w_box,
-                                     uint8_t y_m, uint8_t y_M, uint8_t u_m, uint8_t u_M, uint8_t v_m, uint8_t v_M)
-{
-  // Reset all counts to 0
-  memset(cnts, 0, sizeof(cnts[0][0]) * n_ver * n_hor);
-
-  // Define buffers to read pixels
-  uint8_t *source = input->buf;
-  uint8_t *dest = output->buf;
-
-  // Set the origin of subbox equal to origin of box
-  // Origin is defined as top left
-  uint16_t origin_subbox[2] = {origin_box[0], origin_box[1]};
-  // Divide by number of boxes in both dimensions to get height and width of subboxes
-  uint16_t h_subbox = h_box / n_ver, w_subbox = w_box / n_hor;
-
-  // Copy the creation timestamp (stays the same)
-  output->ts = input->ts;
-
-  // Go trough all the pixels
-  for (uint16_t y = 0; y < output->h; y++)
-  {
-    for (uint16_t x = 0; x < output->w; x += 2)
-    {
-      // Check if the color is inside the specified values and inside box
-      if ((dest[1] >= y_m)
-          && (dest[1] <= y_M)
-          && (dest[0] >= u_m)
-          && (dest[0] <= u_M)
-          && (dest[2] >= v_m)
-          && (dest[2] <= v_M)
-          && (y >= origin_box[1])
-          && (y <  origin_box[1]+w_box)
-          && (x >= origin_box[0]-h_box)
-          && (x < origin_box[0]))
-      {
-        // UYVY
-        dest[0] = 64;         // U
-        dest[1] = source[1];  // Y
-        dest[2] = 255;        // V
-        dest[3] = source[3];  // Y
-
-        // Loop through boxes in search box
-        int flag = 0;
-        for (uint8_t i_subbox = 0; i_subbox < n_ver; i_subbox++)
-        {
-          for (uint8_t j_subbox = 0; j_subbox < n_hor; j_subbox++)
-          {
-
-            if ((y >= origin_subbox[1])
-                && (y < origin_subbox[1] + w_subbox)
-                && (x >= origin_subbox[0] - h_subbox)
-                && (x < origin_subbox[0]))
-            {
-              // Add pixel to box count
-              cnts[i_subbox][j_subbox]++;
-              // Set flag to break out of double loop
-              flag = 1;
-              break;
-            }
-            // Go to next column
-            origin_subbox[1] += w_subbox;
-          }
-          // Reset column
-          origin_subbox[1] = origin_box[1];
-          // Break if pixel was added to a box
-          if (flag) break;
-          // Go to next row
-          origin_subbox[0] -= h_subbox;
-        }
-        // Reset all
-        flag = 0;
-        origin_subbox[0] = origin_box[0];
-        origin_subbox[1] = origin_box[1];
-      }
-      // Go to the next pixels, stride of 2
-      dest += 4;
-      source += 4;
-    }
-  }
-}
-
+// Moved to cr7_vision.c
+///**
+// * Filter colors in an YUV422 image within a certain box, which is divided into multiple subboxes
+// * @param[in] *input The input image to filter
+// * @param[out] *output The filtered output image
+// * @param[in] n_ver The number of subboxes in the vertical direction
+// * @param[in] n_hor The number of subboxes in the horizontal direction
+// * @param[out] cnts[n_ver][n_hor] The filtered pixel count per subbox
+// * @param[in] origin_box[2] The origin of the box, top left corner
+// * @param[in] h_box The height of the box
+// * @param[in] w_box The width of the box
+// * @param[in] y_m The Y minimum value
+// * @param[in] y_M The Y maximum value
+// * @param[in] u_m The U minimum value
+// * @param[in] u_M The U maximum value
+// * @param[in] v_m The V minimum value
+// * @param[in] v_M The V maximum value
+// */
+//void image_yuv422_colorfilt_multibox(struct image_t *input, struct image_t *output, uint8_t n_ver, uint8_t n_hor,
+//                                     uint16_t cnts[n_ver][n_hor], uint16_t origin_box[2], uint16_t h_box, uint16_t w_box,
+//                                     uint8_t y_m, uint8_t y_M, uint8_t u_m, uint8_t u_M, uint8_t v_m, uint8_t v_M)
+//{
+//  // Reset all counts to 0
+//  memset(cnts, 0, sizeof(cnts[0][0]) * n_ver * n_hor);
+//
+//  // Define buffers to read pixels
+//  uint8_t *source = input->buf;
+//  uint8_t *dest = output->buf;
+//
+//  // Set the origin of subbox equal to origin of box
+//  // Origin is defined as top left
+//  uint16_t origin_subbox[2] = {origin_box[0], origin_box[1]};
+//  // Divide by number of boxes in both dimensions to get height and width of subboxes
+//  uint16_t h_subbox = h_box / n_ver, w_subbox = w_box / n_hor;
+//
+//  // Copy the creation timestamp (stays the same)
+//  output->ts = input->ts;
+//
+//  // Go trough all the pixels
+//  for (uint16_t y = 0; y < output->h; y++)
+//  {
+//    for (uint16_t x = 0; x < output->w; x += 2)
+//    {
+//      // Check if the color is inside the specified values and inside box
+//      if ((dest[1] >= y_m)
+//          && (dest[1] <= y_M)
+//          && (dest[0] >= u_m)
+//          && (dest[0] <= u_M)
+//          && (dest[2] >= v_m)
+//          && (dest[2] <= v_M)
+//          && (y >= origin_box[1])
+//          && (y <  origin_box[1]+w_box)
+//          && (x >= origin_box[0]-h_box)
+//          && (x < origin_box[0]))
+//      {
+//        // UYVY
+//        dest[0] = 64;         // U
+//        dest[1] = source[1];  // Y
+//        dest[2] = 255;        // V
+//        dest[3] = source[3];  // Y
+//
+//        // Loop through boxes in search box
+//        int flag = 0;
+//        for (uint8_t i_subbox = 0; i_subbox < n_ver; i_subbox++)
+//        {
+//          for (uint8_t j_subbox = 0; j_subbox < n_hor; j_subbox++)
+//          {
+//
+//            if ((y >= origin_subbox[1])
+//                && (y < origin_subbox[1] + w_subbox)
+//                && (x >= origin_subbox[0] - h_subbox)
+//                && (x < origin_subbox[0]))
+//            {
+//              // Add pixel to box count
+//              cnts[i_subbox][j_subbox]++;
+//              // Set flag to break out of double loop
+//              flag = 1;
+//              break;
+//            }
+//            // Go to next column
+//            origin_subbox[1] += w_subbox;
+//          }
+//          // Reset column
+//          origin_subbox[1] = origin_box[1];
+//          // Break if pixel was added to a box
+//          if (flag) break;
+//          // Go to next row
+//          origin_subbox[0] -= h_subbox;
+//        }
+//        // Reset all
+//        flag = 0;
+//        origin_subbox[0] = origin_box[0];
+//        origin_subbox[1] = origin_box[1];
+//      }
+//      // Go to the next pixels, stride of 2
+//      dest += 4;
+//      source += 4;
+//    }
+//  }
+//}
 
 /**
 * Simplified high-speed low CPU downsample function without averaging

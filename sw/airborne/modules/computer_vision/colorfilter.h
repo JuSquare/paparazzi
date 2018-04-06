@@ -29,13 +29,13 @@
 #include <stdint.h>
 #include "modules/computer_vision/cv.h"
 
-#ifndef VER_SUBBOXES
-#define VER_SUBBOXES 2
-#endif
-
-#ifndef HOR_SUBBOXES
-#define HOR_SUBBOXES 4
-#endif
+//#ifndef VER_SUBBOXES
+//#define VER_SUBBOXES 2
+//#endif
+//
+//#ifndef HOR_SUBBOXES
+//#define HOR_SUBBOXES 4
+//#endif
 
 // Module functions
 extern void colorfilter_init(void);
@@ -51,7 +51,7 @@ extern uint8_t color_cr_min;
 extern uint8_t color_cr_max;
 
 extern uint16_t color_count;
-extern uint16_t color_count_boxes[VER_SUBBOXES][HOR_SUBBOXES];
+//extern uint16_t color_count_boxes[VER_SUBBOXES][HOR_SUBBOXES];
 
 extern struct video_listener *listener;
 

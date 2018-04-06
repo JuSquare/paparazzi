@@ -13,13 +13,10 @@
     <define name="COLORFILTER_FPS" value="0" description="The (maximum) frequency to run the calculations at. If zero, it will max out at the camera frame rate"/>
   </doc>
 
-  <depends>cv_colorfilter.xml</depends>
-
   <header>
     <file name="cr7_vision.h"/>
   </header>
   <init fun="vision_init()"/>
-  <periodic fun="vision_periodic()" freq="4"/>
   <makefile>
     <file name="cr7_vision.c"/>
   </makefile>

@@ -134,7 +134,7 @@ void fullStopRotate(void)
  * @param[in] distanceMeters The distance to set the coordinates forward
  * @return false
  */
-static uint8_t calculateForwards(struct EnuCoor_i *new_coor, float distanceMeters)
+uint8_t calculateForwards(struct EnuCoor_i *new_coor, float distanceMeters)
 {
   struct EnuCoor_i *pos = stateGetPositionEnu_i(); // Get your current position
   struct Int32Eulers *eulerAngles = stateGetNedToBodyEulers_i();
@@ -154,7 +154,7 @@ static uint8_t calculateForwards(struct EnuCoor_i *new_coor, float distanceMeter
  * @param[in] distanceMeters The distance to set the coordinates forward
  * @return false
  */
-static uint8_t calculateLeft(struct EnuCoor_i *new_coor, float distanceMeters)
+uint8_t calculateLeft(struct EnuCoor_i *new_coor, float distanceMeters)
 {
 	float headingChange = 0.08;
 	struct EnuCoor_i *pos = stateGetPositionEnu_i();
@@ -178,7 +178,7 @@ static uint8_t calculateLeft(struct EnuCoor_i *new_coor, float distanceMeters)
  * @param[in] distanceMeters The distance to set the coordinates forward
  * @return false
  */
-static uint8_t calculateRight(struct EnuCoor_i *new_coor, float distanceMeters)
+uint8_t calculateRight(struct EnuCoor_i *new_coor, float distanceMeters)
 {
 	float headingChange 			= 0.08;
 	struct EnuCoor_i *pos 			= stateGetPositionEnu_i();

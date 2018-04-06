@@ -2,7 +2,7 @@
 
 <module name="cr7_avoider" dir="cr7">
   <doc>
-    <description></description>
+    <description>Moves waypoints according to decisions taken by cr7_decision</description>
   </doc>
   <header>
     <file name="cr7_avoider.h"/>

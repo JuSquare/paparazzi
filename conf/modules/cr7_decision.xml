@@ -2,7 +2,7 @@
 
 <module name="cr7_decision" dir="cr7">
   <doc>
-    <description>Deciding on going left/right/straight/stop based on the vision module</description>
+    <description>Decides on moving straight/left/right with variable speed based on the vision module, after which decisions are executed by cr7_avoider</description>
   </doc>
   <header>
     <file name="cr7_decision.h"/>
