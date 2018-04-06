@@ -29,7 +29,6 @@
 #include "modules/cr7/cr7_vision.h"
 #include <stdio.h>
 #include <stdlib.h>
-//#include <stdint.h>
 
 // Variables needed for smoothing using arrshifter
 uint16_t avgArr[J][I] = {0};
@@ -48,7 +47,7 @@ float decisionThreshold = 0.2;
 uint16_t maxCountTop = 2*75*75; // 2 subboxes top inner maximum
 uint16_t countThresholdTop = 75*75*0.10f; // 2 subboxes top inner, not used
 uint16_t countThresholdBotOuter = 75*75*0.20f; // 2 subboxes bottom outer, not used
-uint16_t countThresholdBotInner = 75*75*0.70f; // 2 subboxes bottom inner, changed from 0.60 -> 0.70
+uint16_t countThresholdBotInner = 75*75*0.60f; // 2 subboxes bottom inner
 
 // To store previous correct (!= 0) values
 uint16_t colorCountTopPrev;
@@ -66,8 +65,6 @@ void decide_periodic(void)
 	uint16_t greenRight = colorCountBoxes[0][2] + colorCountBoxes[0][3] + colorCountBoxes[1][2] + colorCountBoxes[1][3];
   // Top 2 inner subboxes
 	uint16_t colorCountTop = colorCountBoxes[0][1] + colorCountBoxes[0][2];
-  // All top subboxes
-//  uint16_t colorCountTopTotal	= colorCountBoxes[0][0] + colorCountBoxes[0][1] + colorCountBoxes[0][2] + colorCountBoxes[0][3];
 	// Bottom 2 inner subboxes
 	uint16_t colorCountBotInner = colorCountBoxes[1][1] + colorCountBoxes[1][2];
 	// Bottom 2 outer subboxes
@@ -89,8 +86,6 @@ void decide_periodic(void)
 	{
 		colorCountBotOuter = colorCountBotOuterPrev;
 	} else {colorCountBotOuterPrev = colorCountBotOuter;}
-
-	printf("avgLeft: %d, avgRight: %d, colorCount: %d, threshold: %d\n", (int)avgLeft, (int)avgRight, colorCount, (int)(decisionThreshold * colorCount / 2.0f));
 
 	// First decider for making a full stop if any the color count in the inner bottom subboxes < threshold
 	if (colorCountBotInner < countThresholdBotInner)
@@ -132,14 +127,12 @@ void LRdecider(int16_t colorLeft, int16_t colorRight)
 		goLeft = 1;
 		goRight = 0;
 		fullStop = 0;
-		printf("Going left bois\n");
 	}
 	else if(colorLeft < colorRight)
 	{
 		goLeft = 0;
 		goRight = 1;
 		fullStop = 0;
-		printf("Going right bois\n");
 	}
 	else // Do nothing, unset obstacle flag
 	{

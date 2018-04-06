@@ -26,8 +26,6 @@
 
 #include "modules/cr7/cr7_avoider.h"
 #include "generated/flight_plan.h"
-//#include "generated/airframe.h"
-//#include "firmwares/rotorcraft/navigation.h"
 #include "modules/cr7/cr7_decision.h"
 #include <math.h>
 #include <stdio.h>

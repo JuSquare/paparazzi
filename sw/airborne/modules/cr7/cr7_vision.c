@@ -26,7 +26,6 @@
 
 #include "modules/cr7/cr7_vision.h"
 #include "generated/flight_plan.h"
-//#include "generated/airframe.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -57,10 +56,6 @@
 #ifndef COLORFILTER_FPS
 #define COLORFILTER_FPS 0 // Default FPS (zero means run at camera fps)
 #endif
-
-//#ifndef COLORFILTER_SEND_OBSTACLE
-//#define COLORFILTER_SEND_OBSTACLE FALSE // Default sonar/agl to use in optical flow visual estimator
-//#endif
 
 struct video_listener *listener = NULL;
 
@@ -132,17 +127,6 @@ struct image_t *colorFilter(struct image_t *img)
       colorCount += colorCountBoxes[iPrint][jPrint];
     }
   }
-//  if (COLORFILTER_SEND_OBSTACLE)
-//  {
-//    if (colorCount > 20)
-//    {
-//      AbiSendMsgOBSTACLE_DETECTION(OBS_DETECTION_COLOR_ID, 1.f, 0.f, 0.f);
-//    }
-//    else
-//    {
-//      AbiSendMsgOBSTACLE_DETECTION(OBS_DETECTION_COLOR_ID, 10.f, 0.f, 0.f);
-//    }
-//  }
   return img; // Color filter did not make a new image
 }
 
