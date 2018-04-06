@@ -50,7 +50,7 @@ extern struct video_listener *listener;
 
 struct image_t *colorFilter(struct image_t *img);
 void colorFilterBoxes(struct image_t *input, struct image_t *output, uint8_t nVer, uint8_t nHor,
-                      uint16_t cnts[nVer][nHor], uint16_t oBox[2], uint16_t hBox, uint16_t wBox,
+                      uint16_t cnts[VER_SUBBOXES][HOR_SUBBOXES], uint16_t oBox[2], uint16_t hBox, uint16_t wBox,
                       uint8_t ym, uint8_t yM, uint8_t um, uint8_t uM, uint8_t vm, uint8_t vM);
 
 void vision_periodic(void);

@@ -29,7 +29,7 @@
 #include "modules/cr7/cr7_vision.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
+//#include <stdint.h>
 
 // Variables needed for smoothing using arrshifter
 uint16_t avgArr[J][I] = {0};
@@ -67,7 +67,7 @@ void decide_periodic(void)
   // Top 2 inner subboxes
 	uint16_t colorCountTop = colorCountBoxes[0][1] + colorCountBoxes[0][2];
   // All top subboxes
-  uint16_t colorCountTopTotal	= colorCountBoxes[0][0] + colorCountBoxes[0][1] + colorCountBoxes[0][2] + colorCountBoxes[0][3];
+//  uint16_t colorCountTopTotal	= colorCountBoxes[0][0] + colorCountBoxes[0][1] + colorCountBoxes[0][2] + colorCountBoxes[0][3];
 	// Bottom 2 inner subboxes
 	uint16_t colorCountBotInner = colorCountBoxes[1][1] + colorCountBoxes[1][2];
 	// Bottom 2 outer subboxes
