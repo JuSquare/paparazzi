@@ -192,6 +192,6 @@ void arrShifter(uint16_t countL, uint16_t countR, uint8_t i, uint8_t j, uint16_t
     avgL_i += arr[0][u];
     avgR_i += arr[1][u];
   }
-  *avgL /= 4.0f;
-	*avgR /= 4.0f;
+  *avgL = avgL_i / 4.0f;
+	*avgR = avgR_i / 4.0f;
 }
