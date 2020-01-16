@@ -28,10 +28,10 @@
 #include "modules/spiking_landing/spiking_landing.h"
 
 // Header with network parameters
-#include "modules/spiking_landing/case1+1393/network_conf.h"
+#include "modules/spiking_landing/case8+2900/network_conf.h"
 
 // tinysnn headers
-#include "Network.h"
+#include "Network2.h"
 
 // Paparazzi headers
 // TODO: do we need all this? And in what order?
@@ -151,8 +151,7 @@ static void init_globals(void);
 // Module initialization function
 static void sl_init() {
   // Build network
-  net = build_network(conf.in_size, conf.in_enc_size, conf.hid_size,
-                      conf.out_size);
+  net = build_network(conf.in_size, conf.in_enc_size, conf.out_size);
   // Init network
   init_network(&net);
   // Load network parameters
@@ -290,7 +289,7 @@ static void sl_run(float divergence, float divergence_dot) {
 
   // Get spike count
   // No need to reset, since that is done in reset_network()
-  spike_count = net.hid->s_count + net.out->s_count;
+  spike_count = net.out->s_count;
 
   // Set control mode: active closed-loop control or linear transform
   if (SL_ACTIVE_CONTROL) {

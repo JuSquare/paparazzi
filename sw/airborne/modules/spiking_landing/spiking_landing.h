@@ -26,7 +26,7 @@
 #pragma once
 
 // tinysnn headers
-#include "Network.h"
+#include "Network2.h"
 
 // C standard library headers
 #include <stdbool.h>
